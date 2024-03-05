@@ -25,6 +25,6 @@
   "devDependencies": {
     "@vite-pwa/astro": "^0.1.1",
     "astro": "^4.0.1",
-    "workbox-window" : "^7.0.0"
+    "workbox-window": "^7.0.0"
   }
 }
