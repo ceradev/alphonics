@@ -1,0 +1,49 @@
+---
+export interface Props {
+  title: string;
+}
+
+const { title } = Astro.props as Props;
+
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{title}</title>
+  <meta name="description" content={title} />
+  <script src="/src/pwa.ts"></script>
+</head>
+<body>
+  <div id="app">
+  <header class="bg-gray-800 text-white py-4 px-8">
+    HEADER
+    </header>
+
+  <div class="flex flex-col min-h-screen">
+    <main class="bg-gray-100 p-8 flex-grow">
+      <div class="max-w-6xl mx-auto">
+        MAIN
+        </div>
+    </main>
+
+    <footer class="bg-gray-800 text-white py-4 px-8">
+      FOOTER
+      </footer>
+  </div>
+  </div>
+</body>
+</html>
+<style is:global>
+  body {
+    font-family: "Inter", sans-serif;
+    font-size: 16px;
+    line-height: 1.5;
+    color: #333;
+    background-color: #f4f4f4;
+  }
+</style>
