@@ -5,8 +5,9 @@ export interface Props {
 
 const { title } = Astro.props as Props;
 
-import MenuHeader from "./MenuHeader.astro";
+import DefaultHeader from "./DefaultHeader.astro";
 import { ViewTransitions } from "astro:transitions";
+import DefaultFooter from "./DefaultFooter.astro";
 ---
 
 <!DOCTYPE html>
@@ -21,13 +22,14 @@ import { ViewTransitions } from "astro:transitions";
 </head>
 <body class="flex flex-col min-h-screen">
   <header class="bg-gradient-to-b from-red-700 to-red-400 text-white px-8">
-    <MenuHeader />
+    <DefaultHeader />
   </header>
 
   <main class=" flex-grow overflow-y-auto bg-gradient-to-b from-red-50 to-red-200 ">
-    <div class="max-w-6xl mx-auto p-8">
       <slot />
-    </div>
   </main>
+  <footer>
+    <DefaultFooter />
+  </footer>
 </body>
 </html>

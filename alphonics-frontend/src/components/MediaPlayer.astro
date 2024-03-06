@@ -1,0 +1,74 @@
+---
+export interface Props {
+  songTitle: string;
+  artist: string;
+  albumCover: string;
+  audioSource: string;
+}
+
+export const props: Props = {
+  songTitle: 'Canción de ejemplo',
+  artist: 'Artista de ejemplo',
+  albumCover: 'url_de_la_portada.jpg',
+  audioSource: 'url_del_audio.mp3',
+};
+
+export function onLoad() {
+  // Puedes agregar lógica de carga aquí si es necesario
+}
+
+export function playPause() {
+  const audio = document.getElementById('audio');
+  audio.paused ? audio.play() : audio.pause();
+}
+
+export function updateProgressBar() {
+  const audio = document.getElementById('audio');
+  const progressBar = document.getElementById('progress-bar');
+  const percentage = (audio.currentTime / audio.duration) * 100;
+  progressBar.style.width = percentage + '%';
+}
+
+export function seek(e) {
+  const audio = document.getElementById('audio');
+  const progressBar = document.getElementById('progress-bar');
+  const rect = progressBar.getBoundingClientRect();
+  const percentage = (e.clientX - rect.left) / rect.width;
+  audio.currentTime = audio.duration * percentage;
+}
+---
+
+<fragment>
+  <div class="fixed bottom-0 w-full bg-gradient-to-t from-red-700 to-red-300 text-white p-4">
+    <div class="flex items-center justify-center">
+      <img src={props.albumCover} alt={props.songTitle} class="w-12 h-12 object-cover rounded-lg" />
+      <div class="ml-2">
+        <div class="text-sm font-medium">{props.songTitle}</div>
+        <div class="text-xs text-gray-400">{props.artist}</div>
+      </div>
+    </div>
+    <audio
+      id="audio"
+      class="w-full mt-2"
+      controls
+      ontimeupdate={updateProgressBar}
+    >
+      <source src={props.audioSource} type="audio/mp3" />
+    </audio>
+    <div
+      id="progress-bar"
+      class="h-1 bg-white mt-2 cursor-pointer"
+      onclick={seek}
+    ></div>
+    <button
+      class="bg-white text-red-600 font-semibold px-2 py-1 rounded-md mt-2 hover:bg-red-600 hover:text-white hover:shadow-md transition-all duration-300 ease-in-out"
+      onclick={playPause}
+    >
+      Play/Pause
+    </button>
+  </div>
+</fragment>
+<div class="mt-16">
+  <!-- Contenido principal de la página -->
+  <p>Contenido principal de la página...</p>
+</div>
