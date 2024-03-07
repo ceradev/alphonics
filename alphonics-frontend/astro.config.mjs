@@ -18,7 +18,7 @@ export default defineConfig({
     
     AstroPWA({
       mode: 'development',
-      base: '/',
+      base: '/welcome',
       scope: '/',
       includeAssets: ['favicon.svg'],
       registerType: 'autoUpdate',
