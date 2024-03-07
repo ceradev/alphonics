@@ -21,14 +21,14 @@ import DefaultFooter from "./DefaultFooter.astro";
   <ViewTransitions />
 </head>
 <body class="flex flex-col min-h-screen">
-  <header class="bg-gradient-to-b from-red-700 to-red-400 text-white px-8">
+  <header class="bg-gradient-to-b from-red-700 via-red-500 to-red-200 text-white px-8">
     <DefaultHeader />
   </header>
 
-  <main class=" flex-grow overflow-y-auto bg-gradient-to-b from-red-50 to-red-200 ">
+  <main class=" flex-grow overflow-y-auto bg-red-200">
       <slot />
   </main>
-  <footer>
+  <footer class="bg-gradient-to-b from-red-200 to-red-500 text-white px-8 py-8">
     <DefaultFooter />
   </footer>
 </body>
