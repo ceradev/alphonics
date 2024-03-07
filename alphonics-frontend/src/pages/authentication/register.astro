@@ -1,10 +1,10 @@
 ---
-import AuthenticationLayout from "../../layouts/AuthenticationLayout.astro";
+import DefaultLayout from "../../layouts/DefaultLayout.astro";
 ---
 
-<AuthenticationLayout title="Alphonics - Log in">
+<DefaultLayout title="Register - Alphonics ">
   <div
-    class="relative flex min-h-screen flex-col items-center pt-16 sm:justify-center sm:pt-0"
+    class="relative flex min-h-screen flex-col items-center sm:justify-center sm:pt-0"
   >
     <div
       class="text-foreground text-red-500 font-bold text-3xl tracking-tighter mx-auto flex items-center gap-2"
@@ -151,13 +151,14 @@ import AuthenticationLayout from "../../layouts/AuthenticationLayout.astro";
               </div>
             </div>
             <div class="mt-4 flex items-center justify-end gap-x-2">
-                <button
+              <button
                 class="font-semibold hover:bg-red-500 hover:text-white hover:ring hover:ring-white transition duration-300 inline-flex items-center justify-center rounded-md text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-red-300 text-white h-10 px-4 py-2"
-                type="submit">Register</button>
+                type="submit">Register</button
+              >
             </div>
           </form>
         </div>
       </div>
     </div>
   </div>
-</AuthenticationLayout>
+</DefaultLayout>
