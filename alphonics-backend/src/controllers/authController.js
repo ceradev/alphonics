@@ -1,4 +1,9 @@
+const jwt = require('jsonwebtoken');
+const cookieParser = require('cookie-parser');
 const User = require("../models/User");
+
+// Accede a la clave secreta desde el archivo .env
+const secretKey = process.env.JWT_SECRET;
 
 class AuthController {
   // Método para registrar un nuevo usuario
@@ -9,44 +14,44 @@ class AuthController {
 
       // Manejo de errores si los datos son inválidos
       if (!userData) {
-        res.status(400).json({ error: "Lease provide user data" });
+        return res.status(400).json({ error: "Please provide user data" });
       } else if (!userData.username || !userData.email || !userData.password) {
-        res.status(400).json({ error: "User data is incomplete" });
+        return res.status(400).json({ error: "User data is incomplete" });
       } else if (
         userData.username.length < 3 ||
         userData.username.length > 30
       ) {
-        res
+        return res
           .status(400)
           .json({ error: "Username must be between 3 and 30 characters" });
       } else if (
         !userData.email.includes("@") ||
         !userData.email.includes(".")
       ) {
-        res.status(400).json({ error: "Invalid email address" });
+        return res.status(400).json({ error: "Invalid email address" });
       } else if (userData.password.length < 8) {
-        res
+        return res
           .status(400)
           .json({ error: "Password must be at least 8 characters long" });
       } else {
         // Lógica para crear el usuario en la base de datos
-        User.create(userData)
-          .then((user) => {
-            res.json({
-              success: true,
-              message: "User created successfully",
-              user: user,
-            });
-          })
-          .catch((error) => {
-            console.log(error);
+        const user = await User.create(userData);
 
-            res.status(500).json({ error: "Failed to register user" });
-          });
+        // Generar token JWT
+        const token = jwt.sign({ user: user.id }, secretKey , { expiresIn: '1h' });
+
+        // Establecer token en una cookie
+        res.cookie('token', token, { httpOnly: true });
+
+        return res.json({
+          success: true,
+          message: "User created successfully",
+          user: user,
+        });
       }
     } catch (error) {
       console.log(error);
-      res.status(500).json({ error: "Unable to register user" });
+      return res.status(500).json({ error: "Unable to register user" });
     }
   }
 
@@ -58,18 +63,18 @@ class AuthController {
 
       // Manejo de errores si los datos son inválidos
       if (!userData) {
-        res.status(400).json({ error: "User data is required" });
+        return res.status(400).json({ error: "User data is required" });
       } else if (!userData.username || !userData.password) {
-        res.status(400).json({ error: "User data is incomplete" });
+        return res.status(400).json({ error: "User data is incomplete" });
       } else if (
         userData.username.length < 3 ||
         userData.username.length > 30
       ) {
-        res
+        return res
           .status(400)
           .json({ error: "Username must be between 3 and 30 characters" });
       } else if (userData.password.length < 8) {
-        res
+        return res
           .status(400)
           .json({ error: "Password must be at least 8 characters long" });
       } else {
@@ -80,38 +85,51 @@ class AuthController {
           },
         });
 
-        if (!user) {
-          res.status(401).json({ error: "Invalid credentials" });
-        } else if (user.password !== userData.password) {
-          res.status(401).json({ error: "Invalid credentials" });
-        } else {
-          // Lógica para iniciar sesión del usuario
-
-          // Enviar respuesta de autenticación
-          res.json({
-            success: true,
-            message: "Login successful",
-            user: user,
-          });
+        if (!user || !(await user.comparePassword(userData.password))) {
+          return res.status(401).json({ error: "Invalid credentials" });
         }
+
+        // Generar token JWT
+        const token = jwt.sign({ user: user.id }, secretKey , { expiresIn: '1h' });
+
+        // Establecer token en una cookie
+        res.cookie('token', token, { httpOnly: true });
+
+        return res.json({
+          success: true,
+          message: "Login successful",
+          user: user,
+        });
       }
     } catch (error) {
       // Manejo de errores
-      res.status(500).json({ error: "Unable to login" });
+      return res.status(500).json({ error: "Unable to login" });
     }
   }
 
   // Método para cerrar sesión
   async logout(req, res) {
     try {
-      // Lógica para cerrar sesión del usuario
-      // ...
+
+      // Eliminar el token de la cookie
+      res.clearCookie('token');
 
       // Enviar respuesta de éxito
-      res.status(200).json({ message: "Cierre de sesión exitoso" });
+      return res.status(200).json({ message: "Logout successful" });
     } catch (error) {
       // Manejo de errores
-      res.status(500).json({ error: "Error al cerrar sesión" });
+      return res.status(500).json({ error: "Error al cerrar sesión" });
+    }
+  }
+
+  // Método para restablecer la contraseña de contraseña
+  async resetPassword(req, res) {
+    try {
+      // Implementar el código para restablecer la、、contrASENA
+      return res.status(200).json({ message: "Password reset successful" });
+    } catch (error) {
+      // Manejo de errores
+      return res.status(500).json({ error: "Error al restablecer contrASENA" });
     }
   }
 }

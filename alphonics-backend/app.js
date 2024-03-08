@@ -1,19 +1,17 @@
 require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
-const cookieSession = require("cookie-session");
-const mysql = require("mysql"); // Importa el paquete mysql2
 const createTestUsers = require('./data/createTestUsers'); // Asegúrate de que la ruta sea correcta
 
 const app = express();
 app.use(cors());
 
+// Route for root endpoint of the API
 app.get("/", (req, res) => {
   res.send("Welcome to Alphonics API.");
 });
 
-// Routes 
-
+// Routes for authentication and user management
 app.use("/api/users", require("./src/routes/users.route"));
 app.use("/auth", require("./src/routes/auth.route"));
 
