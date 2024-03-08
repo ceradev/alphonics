@@ -1,4 +1,4 @@
-const User = require('../src/models/User'); // Asegúrate de que la ruta sea correcta
+const User = require('../models/User'); // Asegúrate de que la ruta sea correcta
 
 async function createTestUsers() {
   try {

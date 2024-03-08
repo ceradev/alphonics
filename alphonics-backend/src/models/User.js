@@ -1,6 +1,7 @@
 const { Model, DataTypes } = require('sequelize');
 const bcrypt = require('bcrypt');
 const sequelize = require('../config/db');
+const createTestUsers = require('../utils/createTestUsers');
 class User extends Model {
   static associate(models) {
     User.hasMany(models.Playlist, {
