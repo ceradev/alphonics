@@ -4,6 +4,7 @@ const cors = require("cors");
 const app = express();
 const connection = require("./src/config/db");
 const createTestUsers = require("./src/utils/createTestUsers");
+const createTestPlaylists = require("./src/utils/createTestPlaylists");
 app.use(cors());
 
 // Route for root endpoint of the API
@@ -35,5 +36,7 @@ app.listen(process.env.APP_PORT, () => {
   console.log(`Server is running on port ${process.env.APP_PORT}.`);
 });
 
-// Connect to the database and create test users
+// Connect to the database and create test users and playlists
 createTestUsers();
+createTestPlaylists();
+

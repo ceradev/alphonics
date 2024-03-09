@@ -1,7 +1,6 @@
 const { Model, DataTypes } = require('sequelize');
 const bcrypt = require('bcrypt');
 const sequelize = require('../config/db');
-const createTestUsers = require('../utils/createTestUsers');
 class User extends Model {
   static associate(models) {
     User.hasMany(models.Playlist, {
@@ -13,14 +12,30 @@ class User extends Model {
   async comparePassword(candidatePassword) {
     return await bcrypt.compare(candidatePassword, this.password);
   }
+
+  async addPlaylists(playlists) {
+    await this.$add('playlists', playlists);
+    return this;
+  }
+
+  async addPlaylist(playlist) {
+    await this.addPlaylists([playlist]);
+  }
+
+  async createPlaylist(playlistData) {
+    const playlist = await Playlist.create(playlistData);
+    await this.addPlaylist(playlist);
+    return playlist;
+  }
 }
 
 User.init(
   {
-    id_user: {
+    id: {
       type: DataTypes.INTEGER,
       primaryKey: true,
       autoIncrement: true,
+      unique: true,
     },
     full_name: {
       type: DataTypes.STRING,

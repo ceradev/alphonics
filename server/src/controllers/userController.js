@@ -1,4 +1,5 @@
-const User = require('../models/User');
+const User = require("../models/User");
+const Playlist = require("../models/Playlist");
 class UserController {
   // Método para obtener todos los usuarios
   getAllUsers(req, res) {
@@ -16,11 +17,118 @@ class UserController {
       .catch((error) => {
         console.log(error);
         // Devolver una respuesta de error
-        res.status(500).json({ 
+        res.status(500).json({
           success: false,
           message: "Error al obtener todos los usuarios",
-         });
+        });
       });
+  }
+
+  // Método para obtener las playlists de un usuario por su ID
+  getUserPlaylists(req, res) {
+    const userId = req.params.id;
+
+    // Lógica para obtener las playlists de un usuario por su ID
+    User.findByPk(userId, {
+      include: [
+        {
+          model: Playlist,
+          as: "playlists",
+        },
+      ],
+    })
+      .then((user) => {
+        if (!user || user === null) {
+          res.status(404).json({
+            success: false,
+            message: "User not found",
+          });
+        } else {
+          res.json({
+            success: true,
+            message: "User playlists retrieved successfully",
+            playlists: user.playlists,
+          });
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+        // Devolver una respuesta de error
+        res.status(500).json({
+          success: false,
+          message: "Error al obtener las playlists del usuario",
+        });
+      });
+  }
+
+  // Método para obtener una playlist por su ID de usuario y su ID de playlist
+  getUserPlaylistById(req, res) {
+    const userId = req.params.id;
+    const playlistId = req.params.playlist_id;
+
+    // Lógica para obtener una playlist por su ID de usuario y su ID de playlist
+    User.findByPk(userId, {
+      include: [
+        {
+          model: Playlist,
+          as: "playlists",
+          where: { id: playlistId },
+          include: [
+            {
+              model: Playlist,
+              as: "tracks",
+            },
+          ],
+        },
+      ],
+    }).then((user) => {
+      if (!user || user === null) {
+        res.status(404).json({
+          success: false,
+          message: "User not found",
+        });
+      } else {
+        res.json({
+          success: true,
+          message: "User playlist retrieved successfully",
+          playlist: user.playlists[0],
+        });
+      }
+    });
+  }
+
+  // Método para crear una playlist para un usuario por su ID de usuario
+  createUserPlaylist(req, res) {
+    const userId = req.params.id;
+    const playlistData = req.body;
+
+    // Lógica para crear una playlist para un usuario por su ID de usuario
+    User.findByPk(userId).then((user) => {
+      if (!user || user === null) {
+        res.status(404).json({
+          success: false,
+          message: "User not found",
+        });
+      } else {
+        user
+          .createPlaylist(playlistData)
+          .then((playlist) => {
+            res.json({
+              success: true,
+              message: "Playlist created successfully",
+              playlist: playlist,
+            });
+          })
+          .catch((error) => {
+            console.log(error);
+            // Devolver una respuesta de error
+            res.status(500).json({
+              success: false,
+              message: "Error al crear la playlist",
+            });
+          });
+      }
+    });
   }
 
   // Método para obtener un usuario por su ID
@@ -31,28 +139,28 @@ class UserController {
     User.findByPk(userId)
       .then((user) => {
         if (!user || user === null) {
-          res.status(404).json({ 
+          res.status(404).json({
             success: false,
             message: "User not found",
-           });
+          });
         } else {
-           res.json({
-          success: true,
-          message: "User retrieved successfully",
-          user: user,
-        });
+          res.json({
+            success: true,
+            message: "User retrieved successfully",
+            user: user,
+          });
         }
       })
       .catch((error) => {
         console.log(error);
         // Devolver una respuesta de error
-        res.status(500).json({ 
-          success: false, 
-          message: "Error al obtener el usuario" 
+        res.status(500).json({
+          success: false,
+          message: "Error al obtener el usuario",
         });
       });
   }
-  
+
   // Método para actualizar un usuario existente
   updateUser(req, res) {
     const userId = req.params.id;
@@ -84,7 +192,7 @@ class UserController {
           id: userId,
         },
       })
-      // Devolver la respuesta con el usuario actualizado
+        // Devolver la respuesta con el usuario actualizado
         .then((user) => {
           res.json({
             success: true,
@@ -111,17 +219,19 @@ class UserController {
         where: {
           id: userId,
         },
-      }).then((user) => {
-        // Devolver la respuesta con el usuario eliminado
-        res.json({
-          success: true,
-          message: "User deleted successfully",
-          user: user,
-        })
-      }).catch((error) => {
-        console.log(error);
-        res.status(500).json({ error: "Error al eliminar el usuario" });
       })
+        .then((user) => {
+          // Devolver la respuesta con el usuario eliminado
+          res.json({
+            success: true,
+            message: "User deleted successfully",
+            user: user,
+          });
+        })
+        .catch((error) => {
+          console.log(error);
+          res.status(500).json({ error: "Error al eliminar el usuario" });
+        });
     }
   }
 }
