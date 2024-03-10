@@ -1,5 +1,4 @@
-const jwt = require('jsonwebtoken');
-const cookieParser = require('cookie-parser');
+const jwt = require("jsonwebtoken");
 const User = require("../models/User");
 
 // Accede a la clave secreta desde el archivo .env
@@ -34,20 +33,34 @@ class AuthController {
           .status(400)
           .json({ error: "Password must be at least 8 characters long" });
       } else {
+
+        console.log(userData);
+
+        // Comprobar que el nombre de usuario y el email no estén en la base de datos
+        const existingUser = await User.findOne({
+          where: [
+            { username: userData.username },
+            { email: userData.email }
+          ]
+        });
+
+        console.log(existingUser);
+
+        if (existingUser) {
+          return res.status(400).json({ error: "Username or email already exists" });
+        }
         // Lógica para crear el usuario en la base de datos
         const user = await User.create(userData);
 
         // Generar token JWT
-        const token = jwt.sign({ user: user.id }, secretKey , { expiresIn: '1h' });
+        const token = jwt.sign({ user: user.id }, secretKey, {
+          expiresIn: "1h",
+        });
 
         // Establecer token en una cookie
-        res.cookie('token', token, { httpOnly: true });
+        res.cookie("token", token, { httpOnly: true });
 
-        return res.json({
-          success: true,
-          message: "User created successfully",
-          user: user,
-        });
+        res.redirect("/login");
       }
     } catch (error) {
       console.log(error);
@@ -60,6 +73,7 @@ class AuthController {
     try {
       // Lógica para autenticar al usuario
       const userData = req.body;
+      console.log(userData);
 
       // Manejo de errores si los datos son inválidos
       if (!userData) {
@@ -85,21 +99,27 @@ class AuthController {
           },
         });
 
-        if (!user || !(await user.comparePassword(userData.password))) {
+        // Comprobar si el usuario existe
+        if (!user) {
+          return res.status(401).json({ 
+            success: false,
+            message: "The user does not exist" });
+        }
+
+        // Comprobar la contraseña del usuario
+        if (!(await user.comparePassword(userData.password))) {
           return res.status(401).json({ error: "Invalid credentials" });
         }
 
         // Generar token JWT
-        const token = jwt.sign({ user: user.id }, secretKey , { expiresIn: '1h' });
+        const token = jwt.sign({ id : user.id ,username: user.username }, secretKey, {
+          expiresIn: "1h",
+        });
 
         // Establecer token en una cookie
-        res.cookie('token', token, { httpOnly: true });
+        res.cookie("token", token, { httpOnly: true });
 
-        return res.json({
-          success: true,
-          message: "Login successful",
-          user: user,
-        });
+        res.redirect("/home");
       }
     } catch (error) {
       // Manejo de errores
@@ -110,26 +130,46 @@ class AuthController {
   // Método para cerrar sesión
   async logout(req, res) {
     try {
-
       // Eliminar el token de la cookie
-      res.clearCookie('token');
+      res.clearCookie("token");
 
       // Enviar respuesta de éxito
-      return res.status(200).json({ message: "Logout successful" });
+      res.redirect("/");
     } catch (error) {
       // Manejo de errores
       return res.status(500).json({ error: "Error al cerrar sesión" });
     }
   }
 
-  // Método para restablecer la contraseña de contraseña
+  // Método para restablecer la contraseña
   async resetPassword(req, res) {
     try {
-      // Implementar el código para restablecer la、、contrASENA
-      return res.status(200).json({ message: "Password reset successful" });
+      // Obtener los datos del formulario
+      const { email, password, newPassword } = req.body;
+
+      // Validar que se proporcionen todos los datos necesarios
+      if (!email || !password || !newPassword) {
+        return res
+          .status(400)
+          .json({ error: "Please provide all required data" });
+      }
+
+      // Buscar al usuario en la base de datos
+      const user = await User.findOne({ where: { email } });
+
+      // Verificar si el usuario existe y si la contraseña actual es correcta
+      if (!user || !(await user.comparePassword(password))) {
+        return res.status(401).json({ error: "Invalid email or password" });
+      }
+
+      // Actualizar la contraseña del usuario
+      user.password = newPassword;
+      await user.save();
+
+      return res.json({ success: true, message: "Password reset successful" });
     } catch (error) {
-      // Manejo de errores
-      return res.status(500).json({ error: "Error al restablecer contrASENA" });
+      console.log(error);
+      return res.status(500).json({ error: "Unable to reset password" });
     }
   }
 }

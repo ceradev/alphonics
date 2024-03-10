@@ -10,6 +10,7 @@ class User extends Model {
   }
 
   async comparePassword(candidatePassword) {
+    console.log(candidatePassword, this.password);
     return await bcrypt.compare(candidatePassword, this.password);
   }
 
@@ -37,7 +38,7 @@ User.init(
       autoIncrement: true,
       unique: true,
     },
-    full_name: {
+    name: {
       type: DataTypes.STRING,
       allowNull: false,
     },
@@ -82,8 +83,10 @@ User.init(
     timestamps: false,
     hooks: {
       beforeCreate: async (user) => {
+        console.log(user.password);
         const hashedPassword = await bcrypt.hash(user.password, 10);
         user.password = hashedPassword;
+        console.log(hashedPassword);
       },
       beforeUpdate: async (user) => {
         if (user.changed('password')) {

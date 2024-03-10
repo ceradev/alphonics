@@ -10,7 +10,7 @@ router.post('/register', authController.register);
 router.post('/login', authController.login);
 
 // Route for user logout
-router.post('/logout', authController.logout);
+router.get('/logout', authController.logout);
 
 // Route for password reset
 router.post('/reset-password', authController.resetPassword);

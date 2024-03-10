@@ -3,8 +3,15 @@ const express = require("express");
 const cors = require("cors");
 const app = express();
 const connection = require("./src/config/db");
+const verifyToken = require("./src/middleware/verifyToken");
 const createTestUsers = require("./src/utils/createTestUsers");
+const cookieParser = require('cookie-parser');
+
 app.use(cors());
+app.use(cookieParser());
+app.set('view engine', 'ejs');
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 
 // Importa los modelos
 const User = require("./src/models/User");
@@ -12,8 +19,24 @@ const Playlist = require("./src/models/Playlist");
 
 // Route for root endpoint of the API
 app.get("/", (req, res) => {
-  res.send("Welcome to Alphonics API.");
+  res.sendFile(__dirname + "/public/welcome.html");
 });
+
+app.get("/login", (req, res) => {
+  res.sendFile(__dirname + "/public/login.html");
+});
+
+app.get("/register", (req, res) => {
+  res.sendFile(__dirname + "/public/register.html");
+});
+
+app.get("/home", verifyToken ,(req, res) => {
+  res.sendFile(__dirname + "/public/home.html");
+})
+
+app.get("/reset-password", (req, res) => {
+  res.sendFile(__dirname + "/public/reset-password.html");
+})
 
 // Sync to the database and create tables
 
@@ -22,7 +45,7 @@ connection
   .authenticate()
   .then(() => {
     console.log("Conectado a la base de datos");
-    return connection.sync({ alter: true });
+    return connection.sync({ force: true });
   })
   .then(() => {
     console.log("Los modelos han sido sincronizados");
