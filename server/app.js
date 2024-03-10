@@ -38,7 +38,6 @@ app.get("/reset-password", (req, res) => {
   res.sendFile(__dirname + "/public/reset-password.html");
 })
 
-// Sync to the database and create tables
 
 // Conecta a la base de datos y sincroniza los modelos
 connection

@@ -53,7 +53,7 @@ class AuthController {
         const user = await User.create(userData);
 
         // Generar token JWT
-        const token = jwt.sign({ user: user.id }, secretKey, {
+        const token = jwt.sign({ id: user.id, username: user.username, email: user.email }, secretKey, {
           expiresIn: "1h",
         });
 
@@ -112,7 +112,7 @@ class AuthController {
         }
 
         // Generar token JWT
-        const token = jwt.sign({ id : user.id ,username: user.username }, secretKey, {
+        const token = jwt.sign({ user: user.id }, secretKey, {
           expiresIn: "1h",
         });
 
@@ -145,17 +145,28 @@ class AuthController {
   async resetPassword(req, res) {
     try {
       // Obtener los datos del formulario
-      const { email, password, newPassword } = req.body;
+      const { password, 'new-password' : newPassword } = req.body;
+
+      // Obtener el token de la cookie
+      const token = req.cookies.token;
+
+      // Validar el token
+      if (!token) {
+        return res.status(401).json({ error: "Unauthorized: Missing token" });
+      }
+
+        const decoded = jwt.verify(token, secretKey);
+     
 
       // Validar que se proporcionen todos los datos necesarios
-      if (!email || !password || !newPassword) {
+      if (!password || !newPassword) {
         return res
           .status(400)
           .json({ error: "Please provide all required data" });
       }
 
       // Buscar al usuario en la base de datos
-      const user = await User.findOne({ where: { email } });
+      const user = await User.findOne({ where: { id: decoded.user } });
 
       // Verificar si el usuario existe y si la contraseña actual es correcta
       if (!user || !(await user.comparePassword(password))) {
