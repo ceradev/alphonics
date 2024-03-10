@@ -73,19 +73,14 @@ class UserController {
           model: Playlist,
           as: "playlists",
           where: { id: playlistId },
-          include: [
-            {
-              model: Playlist,
-              as: "tracks",
-            },
-          ],
+          required: true,
         },
       ],
     }).then((user) => {
       if (!user || user === null) {
         res.status(404).json({
           success: false,
-          message: "User not found",
+          message: "Playlist of the user not found",
         });
       } else {
         res.json({
@@ -125,6 +120,91 @@ class UserController {
             res.status(500).json({
               success: false,
               message: "Error al crear la playlist",
+            });
+          });
+      }
+    });
+  }
+
+  // Método para modificar una playlist por su ID de usuario y su ID de playlist
+  updateUserPlaylistById(req, res) {
+    const userId = req.params.id;
+    const playlistId = req.params.playlist_id;
+    const playlistData = req.body;
+
+    // Lógica para modificar una playlist por su ID de usuario y su ID de playlist
+    User.findByPk(userId).then((user) => {
+      if (!user || user === null) {
+        res.status(404).json({
+          success: false,
+          message: "User not found",
+        });
+      } else {
+        user
+          .getUserPlaylistById(playlistId)
+          .then((playlist) => {
+            if (!playlist || playlist === null) {
+              res.status(404).json({
+                success: false,
+                message: "Playlist not found",
+              });
+            } else {
+              playlist.update(playlistData).then((updatedPlaylist) => {
+                res.json({
+                  success: true,
+                  message: "Playlist updated successfully",
+                });
+              });
+            }
+          })
+          .catch((error) => {
+            console.log(error);
+            // Devolver una respuesta de error
+            res.status(500).json({
+              success: false,
+              message: "Error al actualizar la playlist",
+            });
+          });
+      }
+    });
+  }
+
+  // Método para eliminar una playlist por su ID de usuario y su ID de playlist
+  deleteUserPlaylistById(req, res) {
+    const userId = req.params.id;
+    const playlistId = req.params.playlist_id;
+
+    // Lógica para eliminar una playlist por su ID de usuario y su ID de playlist
+    User.findByPk(userId).then((user) => {
+      if (!user || user === null) {
+        res.status(404).json({
+          success: false,
+          message: "User not found",
+        });
+      } else {
+        user
+          .getUserPlaylistById(playlistId)
+          .then((playlist) => {
+            if (!playlist || playlist === null) {
+              res.status(404).json({
+                success: false,
+                message: "Playlist not found",
+              });
+            } else {
+              playlist.destroy().then(() => {
+                res.json({
+                  success: true,
+                  message: "Playlist deleted successfully",
+                });
+              });
+            }
+          })
+          .catch((error) => {
+            console.log(error);
+            // Devolver una respuesta de error
+            res.status(500).json({
+              success: false,
+              message: "Cannot delete playlist",
             });
           });
       }
