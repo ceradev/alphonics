@@ -52,6 +52,9 @@ connection
     // Inicializa las asociaciones
     User.associate({ Playlist });
     Playlist.associate({ User });
+
+    // Crea los usuarios de prueba
+    return createTestUsers();
   })
   .catch((err) => {
     console.error("Error al conectar a la base de datos:", err);
@@ -65,6 +68,3 @@ app.use("/auth", require("./src/routes/auth.route"));
 app.listen(process.env.APP_PORT, () => {
   console.log(`Server is running on port ${process.env.APP_PORT}.`);
 });
-
-// Connect to the database and create test users and playlists
-createTestUsers();
