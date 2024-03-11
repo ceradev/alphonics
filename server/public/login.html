@@ -52,7 +52,7 @@
 <body>
     <div class="container">
         <h2 style="font-size: 24px; font-weight: bold; text-align: center">Iniciar sesión</h2>
-        <form action="/auth/login" method="post">
+        <form onsubmit="event.preventDefault(); login(document.getElementById('username').value, document.getElementById('password').value)">
             <div class="form-group">
                 <label for="username">Usuario:</label>
                 <input type="text" id="username" name="username" required>
@@ -66,5 +66,4 @@
             </div>
         </form>
     </div>
-</body>
-</html>
+    <script src="./js/test.js"></script>

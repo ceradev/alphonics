@@ -10,6 +10,7 @@ const cookieParser = require('cookie-parser');
 app.use(cors());
 app.use(cookieParser());
 app.set('view engine', 'ejs');
+app.use(express.static(__dirname + "/public"));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
@@ -34,7 +35,7 @@ app.get("/home", verifyToken ,(req, res) => {
   res.sendFile(__dirname + "/public/home.html");
 })
 
-app.get("/reset-password", (req, res) => {
+app.get("/reset-password", verifyToken ,(req, res) => {
   res.sendFile(__dirname + "/public/reset-password.html");
 })
 

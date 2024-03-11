@@ -33,34 +33,38 @@ class AuthController {
           .status(400)
           .json({ error: "Password must be at least 8 characters long" });
       } else {
-
         console.log(userData);
 
         // Comprobar que el nombre de usuario y el email no estén en la base de datos
         const existingUser = await User.findOne({
-          where: [
-            { username: userData.username },
-            { email: userData.email }
-          ]
+          where: [{ username: userData.username }, { email: userData.email }],
         });
 
         console.log(existingUser);
 
         if (existingUser) {
-          return res.status(400).json({ error: "Username or email already exists" });
+          return res
+            .status(400)
+            .json({ error: "Username or email already exists" });
         }
         // Lógica para crear el usuario en la base de datos
         const user = await User.create(userData);
 
         // Generar token JWT
-        const token = jwt.sign({ id: user.id, username: user.username, email: user.email }, secretKey, {
-          expiresIn: "1h",
-        });
+        const token = jwt.sign(
+          { id: user.id, username: user.username, email: user.email },
+          secretKey,
+          {
+            expiresIn: "1h",
+          }
+        );
 
         // Establecer token en una cookie
         res.cookie("token", token, { httpOnly: true });
 
-        res.redirect("/login");
+        return res
+          .status(201)
+          .json({ success: true, message: "User registered successfully" });
       }
     } catch (error) {
       console.log(error);
@@ -101,9 +105,10 @@ class AuthController {
 
         // Comprobar si el usuario existe
         if (!user) {
-          return res.status(401).json({ 
+          return res.status(401).json({
             success: false,
-            message: "The user does not exist" });
+            message: "The user does not exist",
+          });
         }
 
         // Comprobar la contraseña del usuario
@@ -119,7 +124,9 @@ class AuthController {
         // Establecer token en una cookie
         res.cookie("token", token, { httpOnly: true });
 
-        res.redirect("/home");
+        return res
+          .status(200)
+          .json({ success: true, message: "Login successful" });
       }
     } catch (error) {
       // Manejo de errores
@@ -134,7 +141,8 @@ class AuthController {
       res.clearCookie("token");
 
       // Enviar respuesta de éxito
-      res.redirect("/");
+      return res.status(200).json({ 
+        success: true, message: "Logout successful" });
     } catch (error) {
       // Manejo de errores
       return res.status(500).json({ error: "Error al cerrar sesión" });
@@ -145,7 +153,7 @@ class AuthController {
   async resetPassword(req, res) {
     try {
       // Obtener los datos del formulario
-      const { password, 'new-password' : newPassword } = req.body;
+      const { password, "newPassword": newPassword } = req.body;
 
       // Obtener el token de la cookie
       const token = req.cookies.token;
@@ -155,8 +163,7 @@ class AuthController {
         return res.status(401).json({ error: "Unauthorized: Missing token" });
       }
 
-        const decoded = jwt.verify(token, secretKey);
-     
+      const decoded = jwt.verify(token, secretKey);
 
       // Validar que se proporcionen todos los datos necesarios
       if (!password || !newPassword) {

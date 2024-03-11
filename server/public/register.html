@@ -54,7 +54,7 @@
 <body>
     <div class="container">
         <h1 style="font-size: 35; font-weight: bold; text-align: center">Registro</h1>
-        <form action="/auth/register" method="post">
+        <form onsubmit="event.preventDefault(); register(document.getElementById('name').value, document.getElementById('username').value, document.getElementById('email').value, document.getElementById('password').value)" >
             <div class="form-group">
                 <label for="nombre">Nombre y Apellidos:</label>
                 <input type="text" id="name" name="name" required>
@@ -75,5 +75,6 @@
             </div>
         </form>
     </div>
+    <script src="./js/test.js"></script>
 </body>
 </html>

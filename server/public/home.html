@@ -37,6 +37,27 @@
             border-radius: 4px;
             transition: background-color 0.3s;
         }
+
+        a:hover {
+            background-color: #45a049;
+        }
+
+        button {
+            display: block;
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
     </style>
 </head>
 <body>
@@ -44,8 +65,9 @@
         <h1>Bienvenido a mi página de inicio</h1>
         <p>¡Hola! Esta es una página de inicio básica con CSS.</p>
         <p>¡Gracias por visitar mi página!</p>
-        <a href="/auth/logout">Cerrar sesión</a>
         <a href="/reset-password">Restablecer contraseña</a>
+        <button onclick="logout()">Cerrar sesión</button>
     </div>
+    <script src="./js/test.js"></script>
 </body>
 </html>
