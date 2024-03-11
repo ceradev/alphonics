@@ -1,56 +1,69 @@
-import { defineConfig } from 'astro/config';
+import { defineConfig } from "astro/config";
 import react from "@astrojs/react";
 import tailwind from "@astrojs/tailwind";
-import { defineConfig } from 'astro/config'
-import AstroPWA from '@vite-pwa/astro'
+import { defineConfig } from "astro/config";
+import AstroPWA from "@vite-pwa/astro";
 
 // https://astro.build/config
 export default defineConfig({
   vite: {
-    logLevel: 'info',
+    logLevel: "info",
     define: {
       __DATE__: `'${new Date().toISOString()}'`,
     },
   },
+
+  pages: {
+    "/": {
+      component: () => import("./src/pages/index.astro"),
+    },
+    "/welcome": {
+      component: () => import("./src/pages/welcome.astro"),
+    },
+    "/about": {
+      component: () => import("./src/pages/about.astro"),
+    },
+  },
   integrations: [
-    react(), 
+    react(),
     tailwind(),
-    
+
     AstroPWA({
-      mode: 'development',
-      base: '/welcome',
-      scope: '/',
-      includeAssets: ['favicon.svg'],
-      registerType: 'autoUpdate',
+      mode: "development",
+      base: "/welcome",
+      scope: "/",
+      includeAssets: ["favicon.svg"],
+      registerType: "autoUpdate",
       manifest: {
-        name: 'Alphonic PWA',
-        short_name: 'Alphonic',
-        theme_color: '#b81414',
-        display: 'standalone',
-        background_color: '#666666',
-        description: 'Alphonics es más que una aplicación de música; es tu espacio personal para explorar, descubrir y crear sonidos únicos.',
+        name: "Alphonics",
+        short_name: "Alphonics",
+        theme_color: "#b81414",
+        display: "standalone",
+        background_color: "#666666",
+        description:
+          "Alphonics es más que una aplicación de música; es tu espacio personal para explorar, descubrir y crear sonidos únicos.",
         icons: [
           {
-            src: '/android-chrome-192x192.png',
-            sizes: '192x192',
-            type: 'image/png',
+            src: "/android-chrome-192x192.png",
+            sizes: "192x192",
+            type: "image/png",
           },
           {
-            src: '/android-chrome-512x512.png',
-            sizes: '512x512',
-            type: 'image/png',
+            src: "/android-chrome-512x512.png",
+            sizes: "512x512",
+            type: "image/png",
           },
           {
-            src: '/android-chrome-512x512.png',
-            sizes: '512x512',
-            type: 'image/png',
-            purpose: 'maskable',
+            src: "/android-chrome-512x512.png",
+            sizes: "512x512",
+            type: "image/png",
+            purpose: "maskable",
           },
         ],
       },
       workbox: {
-        navigateFallback: '/',
-        globPatterns: ['**/*.{css,js,html,svg,png,ico,txt}'],
+        navigateFallback: "/",
+        globPatterns: ["**/*.{css,js,html,svg,png,ico,txt}"],
       },
       devOptions: {
         enabled: false,
