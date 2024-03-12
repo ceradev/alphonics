@@ -62,7 +62,7 @@ connection
   });
 
 // Routes for authentication and user management
-app.use("/api/users", require("./src/routes/users.route"));
+app.use("/api/users", verifyToken ,require("./src/routes/users.route"));
 app.use("/api/playlists", require("./src/routes/playlist.route"));
 app.use("/auth", require("./src/routes/auth.route"));
 

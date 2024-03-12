@@ -5,6 +5,7 @@
   "private": true,
   "scripts": {
     "dev:client": "cd client && astro dev",
+    "astro preferences disable devToolbar": "cd client && astro preferences disable devToolbar",
     "build:client": "cd client && astro build",
     "preview:client": "cd client && astro preview",
     "build:server": "cd server && npm run build",
