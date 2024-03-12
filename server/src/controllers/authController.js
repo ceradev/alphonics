@@ -76,8 +76,46 @@ class AuthController {
     }
   }
 
-  // Otros métodos...
+  // Método para cerrar sesión
+  logout(req, res) {
+    res.clearCookie("token");
+    return res.status(200).json({ success: true, message: "Logout successful" });
+  }
 
+  // Método para reestablecer la contraseña del usuario
+  async resetPassword(req, res) {
+    try {
+      const userData = req.body;
+
+      // Validación de datos de usuario
+      const validationError = validateLoginData(userData);
+      if (validationError) {
+        return res.status(400).json({ error: validationError });
+      }
+
+      // Autenticar al usuario en la base de datos
+      const user = await User.findOne({
+        where: { username: userData.username },
+      });
+
+      if (!user) {
+        return res.status(404).json({ error: "User not found" });
+      }
+
+      // Actualizar la contraseña del usuario
+      user.password = userData.password;
+      await user.save();
+
+      return res
+        .status(200)
+        .json({ success: true, message: "Password reset successful" });
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({ error: "Unable to reset password" });
+    }
+  }
+
+  
   // Función para validar datos de usuario
   validateUserData(userData) {
     if (!userData) {
@@ -130,3 +168,5 @@ class AuthController {
     );
   }
 }
+
+module.exports = AuthController;
