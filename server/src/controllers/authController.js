@@ -139,6 +139,7 @@ class AuthController {
     }
   }
 
+  
   // Función para validar datos de usuario
   validateUserData(userData) {
     if (!userData) {
