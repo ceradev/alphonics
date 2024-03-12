@@ -6,24 +6,6 @@ import AstroPWA from "@vite-pwa/astro";
 
 // https://astro.build/config
 export default defineConfig({
-  vite: {
-    logLevel: "info",
-    define: {
-      __DATE__: `'${new Date().toISOString()}'`,
-    },
-  },
-
-  pages: {
-    "/": {
-      component: () => import("./src/pages/index.astro"),
-    },
-    "/welcome": {
-      component: () => import("./src/pages/welcome.astro"),
-    },
-    "/about": {
-      component: () => import("./src/pages/about.astro"),
-    },
-  },
   integrations: [
     react(),
     tailwind(),
@@ -44,17 +26,17 @@ export default defineConfig({
           "Alphonics es más que una aplicación de música; es tu espacio personal para explorar, descubrir y crear sonidos únicos.",
         icons: [
           {
-            src: "/android-chrome-192x192.png",
+            src: "/icon-192x192.png",
             sizes: "192x192",
             type: "image/png",
           },
           {
-            src: "/android-chrome-512x512.png",
+            src: "/icon-512x512.png",
             sizes: "512x512",
             type: "image/png",
           },
           {
-            src: "/android-chrome-512x512.png",
+            src: "/icon-512x512.png",
             sizes: "512x512",
             type: "image/png",
             purpose: "maskable",
