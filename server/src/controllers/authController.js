@@ -2,8 +2,8 @@ const jwt = require("jsonwebtoken");
 const User = require("../models/User");
 
 // Accede a la clave secreta desde el archivo .env
-const secretKey = process.env.JWT_SECRET;
-
+const accessToken = process.env.ACCESS_TOKEN;
+const refreshToken = process.env.REFRESH_TOKEN;
 class AuthController {
   // Método para registrar un nuevo usuario
   async register(req, res) {
@@ -22,7 +22,9 @@ class AuthController {
       });
 
       if (existingUser) {
-        return res.status(400).json({ error: "Username or email already exists" });
+        return res
+          .status(400)
+          .json({ error: "Username or email already exists" });
       }
 
       // Crear usuario en la base de datos
@@ -69,14 +71,73 @@ class AuthController {
       // Establecer token en una cookie
       res.cookie("token", token, { httpOnly: true });
 
-      return res.status(200).json({ success: true, message: "Login successful" });
+      return res
+        .status(200)
+        .json({ success: true, message: "Login successful" });
     } catch (error) {
       console.error(error);
       return res.status(500).json({ error: "Unable to login" });
     }
   }
 
-  // Otros métodos...
+  // Método para cerrar sesión
+  logout(req, res) {
+    try {
+      // Eliminar token de la cookie
+      res.clearCookie("token");
+
+      return res
+        .status(200)
+        .json({ 
+          success: true, 
+          message: "Logout successful" 
+        });
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({
+        success: false,
+        error: "Unable to logout",
+      });
+    }
+  }
+
+  // Método para restablecer la contraseña del usuario
+  async resetPassword(req, res) {
+    try {
+      const { password, newPassword } = req.body;
+
+      // Validación de datos de usuario
+      const validationError = validateResetData(password, newPassword);
+      if (validationError) {
+        return res.status(400).json({ error: validationError });
+      }
+
+      // Autenticar al usuario en la base de datos
+      const user = await User.findOne({
+        where: { password },
+      });
+
+      if (!user) {
+        return res.status(401).json({ 
+          success: false,
+          error: "Invalid credentials" });
+      }
+
+      // Actualizar la contraseña del usuario
+      await user.update({ password: newPassword });
+
+      return res.status(200).json({
+        success: true,
+        message: "Password reset successful",
+      });
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({
+        success: false,
+        error: "Unable to reset password",
+      });
+    }
+  }
 
   // Función para validar datos de usuario
   validateUserData(userData) {
@@ -84,15 +145,9 @@ class AuthController {
       return "Please provide user data";
     } else if (!userData.username || !userData.email || !userData.password) {
       return "User data is incomplete";
-    } else if (
-      userData.username.length < 3 ||
-      userData.username.length > 30
-    ) {
+    } else if (userData.username.length < 3 || userData.username.length > 30) {
       return "Username must be between 3 and 30 characters";
-    } else if (
-      !userData.email.includes("@") ||
-      !userData.email.includes(".")
-    ) {
+    } else if (!userData.email.includes("@") || !userData.email.includes(".")) {
       return "Invalid email address";
     } else if (userData.password.length < 8) {
       return "Password must be at least 8 characters long";
@@ -107,10 +162,7 @@ class AuthController {
       return "User data is required";
     } else if (!userData.username || !userData.password) {
       return "User data is incomplete";
-    } else if (
-      userData.username.length < 3 ||
-      userData.username.length > 30
-    ) {
+    } else if (userData.username.length < 3 || userData.username.length > 30) {
       return "Username must be between 3 and 30 characters";
     } else if (userData.password.length < 8) {
       return "Password must be at least 8 characters long";
@@ -121,13 +173,9 @@ class AuthController {
 
   // Función para generar token JWT
   generateToken(userId) {
-    return jwt.sign(
-      { id: userId },
-      secretKey,
-      {
-        expiresIn: "1h",
-      }
-    );
+    return jwt.sign({ id: userId }, secretKey, {
+      expiresIn: "1h",
+    });
   }
 }
 
