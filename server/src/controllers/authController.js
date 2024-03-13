@@ -1,9 +1,5 @@
-const jwt = require("jsonwebtoken");
 const User = require("../models/User");
 
-// Accede a la clave secreta desde el archivo .env
-const accessToken = process.env.ACCESS_TOKEN;
-const refreshToken = process.env.REFRESH_TOKEN;
 class AuthController {
   // Método para registrar un nuevo usuario
   async register(req, res) {
@@ -11,7 +7,7 @@ class AuthController {
       const userData = req.body;
 
       // Validación de datos de usuario
-      const validationError = validateUserData(userData);
+      const validationError = this.validateUserData(userData);
       if (validationError) {
         return res.status(400).json({ error: validationError });
       }
@@ -31,10 +27,12 @@ class AuthController {
       const user = await User.create(userData);
 
       // Generar token JWT
-      const token = generateToken(user.id);
+      const accessToken = this.generateToken(user.id, "access");
+      const refreshToken = this.generateToken(user.id, "refresh");
 
-      // Establecer token en una cookie
-      res.cookie("token", token, { httpOnly: true });
+      // Establecer tokens en cookies
+      res.cookie("accessToken", accessToken, { httpOnly: true });
+      res.cookie("refreshToken", refreshToken, { httpOnly: true });
 
       return res
         .status(201)
@@ -51,7 +49,7 @@ class AuthController {
       const userData = req.body;
 
       // Validación de datos de usuario
-      const validationError = validateLoginData(userData);
+      const validationError = this.validateLoginData(userData);
       if (validationError) {
         return res.status(400).json({ error: validationError });
       }
@@ -66,10 +64,12 @@ class AuthController {
       }
 
       // Generar token JWT
-      const token = generateToken(user.id);
+      const accessToken = this.generateToken(user.id, "access");
+      const refreshToken = this.generateToken(user.id, "refresh");
 
-      // Establecer token en una cookie
-      res.cookie("token", token, { httpOnly: true });
+      // Establecer tokens en cookies
+      res.cookie("accessToken", accessToken, { httpOnly: true });
+      res.cookie("refreshToken", refreshToken, { httpOnly: true });
 
       return res
         .status(200)
@@ -86,12 +86,10 @@ class AuthController {
       // Eliminar token de la cookie
       res.clearCookie("token");
 
-      return res
-        .status(200)
-        .json({ 
-          success: true, 
-          message: "Logout successful" 
-        });
+      return res.status(200).json({
+        success: true,
+        message: "Logout successful",
+      });
     } catch (error) {
       console.error(error);
       return res.status(500).json({
@@ -107,7 +105,7 @@ class AuthController {
       const { password, newPassword } = req.body;
 
       // Validación de datos de usuario
-      const validationError = validateResetData(password, newPassword);
+      const validationError = this.validateResetData(password, newPassword);
       if (validationError) {
         return res.status(400).json({ error: validationError });
       }
@@ -118,9 +116,10 @@ class AuthController {
       });
 
       if (!user) {
-        return res.status(401).json({ 
+        return res.status(401).json({
           success: false,
-          error: "Invalid credentials" });
+          error: "Invalid credentials",
+        });
       }
 
       // Actualizar la contraseña del usuario
@@ -139,7 +138,6 @@ class AuthController {
     }
   }
 
-  
   // Función para validar datos de usuario
   validateUserData(userData) {
     if (!userData) {
@@ -173,9 +171,16 @@ class AuthController {
   }
 
   // Función para generar token JWT
-  generateToken(userId) {
-    return jwt.sign({ id: userId }, secretKey, {
-      expiresIn: "1h",
+  generateToken(userId, type) {
+    const jwt = require("jsonwebtoken");
+    // Credenciales del token
+    const secret =
+      type === "access"
+        ? process.env.ACCESS_TOKEN_SECRET
+        : process.env.REFRESH_TOKEN_SECRET;
+    const expiresIn = type === "access" ? "1h" : "1d";
+    return jwt.sign({ id: userId }, secret, {
+      expiresIn: expiresIn,
     });
   }
 }
