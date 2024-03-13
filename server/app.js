@@ -1,9 +1,7 @@
 require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
-const helmet = require("helmet"); // Middleware de seguridad HTTP
 const rateLimit = require("express-rate-limit"); // Middleware de limitación de velocidad
-const csurf = require("csurf"); // Middleware de protección CSRF
 const cookieParser = require("cookie-parser");
 const connection = require("./src/config/db");
 const verifyToken = require("./src/middleware/verifyToken");
@@ -11,24 +9,12 @@ const createTestUsers = require("./src/utils/createTestUsers");
 
 const app = express();
 
-// Middleware de seguridad HTTP
-app.use(helmet());
-
 // Middleware de limitación de velocidad
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutos
   max: 100, // Límite de solicitudes por IP
 });
 app.use(limiter);
-
-// Middleware de protección CSRF
-app.use(csurf());
-app.use((err, req, res, next) => {
-  if (err.code !== "EBADCSRFTOKEN") return next(err);
-
-  // Manejar el error de token CSRF inválido
-  res.status(403).send("¡Token CSRF inválido!");
-});
 
 app.use(cors());
 app.use(cookieParser());

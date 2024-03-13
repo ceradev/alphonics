@@ -1,19 +1,32 @@
 const jwt = require('jsonwebtoken');
-const secretKey = process.env.JWT_SECRET; // Debes usar la misma clave secreta que usaste para firmar la token
+const secretKeyAccessToken = process.env.ACCESS_TOKEN; // Clave secreta para el token de acceso
+const secretKeyRefreshToken = process.env.REFRESH_TOKEN; // Clave secreta para el token de refresco
 
 function verifyToken(req, res, next) {
-  const token = req.cookies.token;
+  const accessToken = req.cookies.accessToken;
+  const refreshToken = req.cookies.refreshToken;
 
-  if (!token) {
+  if (!accessToken || !refreshToken) {
     return res.status(401).json({ error: 'Unauthorized: Missing token' });
   }
 
   try {
-    const decoded = jwt.verify(token, secretKey);
-    req.user = decoded.user; // Añadir el ID de usuario a la solicitud para su uso en rutas protegidas
+    // Verificar y decodificar el token de acceso
+    const decodedAccessToken = jwt.verify(accessToken, secretKeyAccessToken);
+    req.user = decodedAccessToken.user; // Añadir el ID de usuario a la solicitud para su uso en rutas protegidas
     next();
-  } catch (error) {
-    return res.status(401).json({ error: 'Unauthorized: Invalid token' });
+  } catch (errorAccessToken) {
+    try {
+      // Verificar y decodificar el token de refresco
+      const decodedRefreshToken = jwt.verify(refreshToken, secretKeyRefreshToken);
+      // En este punto, si el token de refresco es válido, podrías generar un nuevo token de acceso y establecerlo en la cookie de acceso nuevamente
+      const newAccessToken = generateNewAccessToken(decodedRefreshToken.userId); // Por ejemplo, suponiendo que tienes una función para generar un nuevo token de acceso
+      res.cookie('accessToken', newAccessToken, { httpOnly: true });
+      req.user = decodedRefreshToken.userId; // Añadir el ID de usuario a la solicitud para su uso en rutas protegidas
+      next();
+    } catch (errorRefreshToken) {
+      return res.status(401).json({ error: 'Unauthorized: Invalid tokens' });
+    }
   }
 }
 

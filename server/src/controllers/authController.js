@@ -2,12 +2,12 @@ const User = require("../models/User");
 
 class AuthController {
   // Método para registrar un nuevo usuario
-  async register(req, res) {
+  register = async (req, res) => {
     try {
       const userData = req.body;
 
       // Validación de datos de usuario
-      const validationError = this.validateUserData(userData);
+      const validationError = this.validateUserData.bind(this)(userData);
       if (validationError) {
         return res.status(400).json({ error: validationError });
       }
@@ -41,15 +41,15 @@ class AuthController {
       console.error(error);
       return res.status(500).json({ error: "Unable to register user" });
     }
-  }
+  };
 
   // Método para iniciar sesión
-  async login(req, res) {
+  login = async (req, res) => {
     try {
       const userData = req.body;
 
       // Validación de datos de usuario
-      const validationError = this.validateLoginData(userData);
+      const validationError = this.validateLoginData.bind(this)(userData);
       if (validationError) {
         return res.status(400).json({ error: validationError });
       }
@@ -78,13 +78,14 @@ class AuthController {
       console.error(error);
       return res.status(500).json({ error: "Unable to login" });
     }
-  }
+  };
 
   // Método para cerrar sesión
-  logout(req, res) {
+  logout = (req, res) => {
     try {
-      // Eliminar token de la cookie
-      res.clearCookie("token");
+      // Eliminar token de la cookie de acceso y refresco
+      res.clearCookie("accessToken");
+      res.clearCookie("refreshToken");
 
       return res.status(200).json({
         success: true,
@@ -100,12 +101,15 @@ class AuthController {
   }
 
   // Método para restablecer la contraseña del usuario
-  async resetPassword(req, res) {
+  resetPassword = async (req, res) => {
     try {
       const { password, newPassword } = req.body;
 
       // Validación de datos de usuario
-      const validationError = this.validateResetData(password, newPassword);
+      const validationError = this.validateResetData.bind(this)(
+        password,
+        newPassword
+      );
       if (validationError) {
         return res.status(400).json({ error: validationError });
       }
@@ -176,8 +180,8 @@ class AuthController {
     // Credenciales del token
     const secret =
       type === "access"
-        ? process.env.ACCESS_TOKEN_SECRET
-        : process.env.REFRESH_TOKEN_SECRET;
+        ? process.env.ACCESS_TOKEN
+        : process.env.REFRESH_TOKEN;
     const expiresIn = type === "access" ? "1h" : "1d";
     return jwt.sign({ id: userId }, secret, {
       expiresIn: expiresIn,
