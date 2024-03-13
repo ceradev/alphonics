@@ -4,14 +4,37 @@ const LoginForm = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
+  const [error, setError] = useState(null);
 
   function handleSubmit(e) {
     e.preventDefault();
-    console.log("Submit");
+
+    fetch("http://localhost:3000/auth/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ username, password }),
+    })
+      .then((res) => {
+        if (res.ok) {
+          // Si la respuesta del servidor es exitosa, redirige al usuario o realiza otras acciones necesarias
+          // Por ejemplo, podrías redirigir a la página principal de tu aplicación
+          window.location.href = "/home";
+        } else {
+          // Si la respuesta del servidor indica un error, muestra el mensaje de error al usuario
+          return res.json().then((data) => {
+            throw new Error(data.error || "Error en el inicio de sesión");
+          });
+        }
+      })
+      .catch((error) => {
+        setError(error.message);
+      });
   }
 
   return (
-    <form onSubmit={ handleSubmit }>
+    <form onSubmit={handleSubmit}>
       <div>
         <div>
           <div className="group relative rounded-lg border focus-within:border-red-200 px-3 pb-1.5 pt-2.5 duration-200 focus-within:ring focus-within:ring-red-400/30">
@@ -27,9 +50,9 @@ const LoginForm = () => {
                   className="w-6 h-6"
                 >
                   <path
-                    fill-rule="evenodd"
+                    fillRule="evenodd"
                     d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12Zm13.36-1.814a.75.75 0 1 0-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 0 0-1.06 1.06l2.25 2.25a.75.75 0 0 0 1.14-.094l3.75-5.25Z"
-                    clip-rule="evenodd"
+                    clipRule="evenodd"
                   ></path>
                 </svg>
               </div>
@@ -87,6 +110,7 @@ const LoginForm = () => {
         </a>
         <button className="font-semibold hover:bg-red-500 hover:text-white hover:ring hover:ring-white transition duration-300 inline-flex items-center justify-center rounded-md text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-red-300 text-white h-10 px-4 py-2" type="submit">Log in</button>
       </div>
+      {error && <p className="text-red-500">{error}</p>}
     </form>
   );
 };
