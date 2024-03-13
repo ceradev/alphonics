@@ -1,10 +1,22 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 const LoginForm = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
   const [error, setError] = useState(null);
+
+  useEffect(() => {
+    let timer;
+    if (error) {
+      timer = setTimeout(() => {
+        setError(null);
+      }, 5000); // Cambia el valor 5000 por el tiempo en milisegundos que deseas que dure el mensaje de error
+    }
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [error]);
 
   function handleSubmit(e) {
     e.preventDefault();
@@ -18,8 +30,6 @@ const LoginForm = () => {
     })
       .then((res) => {
         if (res.ok) {
-          // Si la respuesta del servidor es exitosa, redirige al usuario o realiza otras acciones necesarias
-          // Por ejemplo, podrías redirigir a la página principal de tu aplicación
           window.location.href = "/home";
         } else {
           // Si la respuesta del servidor indica un error, muestra el mensaje de error al usuario
@@ -89,6 +99,7 @@ const LoginForm = () => {
           </div>
         </div>
       </div>
+      {error && <p className="text-red-500 font-sans mt-2">{error}</p>}
       <div className="mt-4 flex items-center justify-between">
         <label className="flex items-center gap-2">
           <input
@@ -108,9 +119,13 @@ const LoginForm = () => {
         >
           Register
         </a>
-        <button className="font-semibold hover:bg-red-500 hover:text-white hover:ring hover:ring-white transition duration-300 inline-flex items-center justify-center rounded-md text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-red-300 text-white h-10 px-4 py-2" type="submit">Log in</button>
+        <button
+          className="font-semibold hover:bg-red-500 hover:text-white hover:ring hover:ring-white transition duration-300 inline-flex items-center justify-center rounded-md text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-red-300 text-white h-10 px-4 py-2"
+          type="submit"
+        >
+          Log in
+        </button>
       </div>
-      {error && <p className="text-red-500">{error}</p>}
     </form>
   );
 };
