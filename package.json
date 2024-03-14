@@ -4,10 +4,10 @@
   "description": "Alphonics is a progressive web app for enjoy music with friends and family together.",
   "private": true,
   "scripts": {
-    "dev:client": "cd client && astro dev",
-    "astro preferences disable devToolbar": "cd client && astro preferences disable devToolbar",
-    "build:client": "cd client && astro build",
-    "preview:client": "cd client && astro preview",
+    "dev:client": "cd client && vite",
+    "build:client": "cd client && vite build",
+    "preview:client": "cd client && vite preview",
+    "lint:client" : "cd client && eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
     "build:server": "cd server && npm run build",
     "start:server": "cd server && npm run start",
     "dev:server": "cd server && nodemon app.js",
@@ -17,13 +17,6 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@astrojs/check": "^0.5.6",
-    "@astrojs/react": "^3.0.10",
-    "@astrojs/renderer-react": "^0.5.0",
-    "@astrojs/tailwind": "^5.1.0",
-    "@types/react": "^18.2.63",
-    "@types/react-dom": "^18.2.19",
-    "astro": "^4.4.11",
     "bcrypt": "^5.1.1",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
@@ -34,15 +27,26 @@
     "helmet": "^7.1.0",
     "jsonwebtoken": "^9.0.2",
     "mysql2": "^3.9.2",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
     "sequelize": "^6.37.1",
     "tailwindcss": "^3.4.1",
-    "typescript": "^5.3.3"
+    "prop-types": "^15.8.1",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-icons": "^5.0.1",
+    "react-router-dom": "^6.22.3",
+    "react-transition-group": "^4.4.5"
   },
   "devDependencies": {
-    "@vite-pwa/astro": "^0.1.1",
-    "astro": "^4.0.1",
-    "workbox-window": "^7.0.0"
+    "@types/react": "^18.2.64",
+    "@types/react-dom": "^18.2.21",
+    "@vitejs/plugin-react-swc": "^3.5.0",
+    "autoprefixer": "^10.4.18",
+    "eslint": "^8.57.0",
+    "eslint-plugin-react": "^7.34.0",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "eslint-plugin-react-refresh": "^0.4.5",
+    "postcss": "^8.4.35",
+    "tailwindcss": "^3.4.1",
+    "vite": "^5.1.6"
   }
 }

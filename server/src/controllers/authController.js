@@ -36,7 +36,7 @@ class AuthController {
 
       return res
         .status(201)
-        .json({ success: true, message: "User registered successfully" });
+        .json({ success: true, message: "User registered successfully", user : user.id });
     } catch (error) {
       console.error(error);
       return res.status(500).json({ error: "Unable to register user" });
@@ -73,7 +73,7 @@ class AuthController {
 
       return res
         .status(200)
-        .json({ success: true, message: "Login successful" });
+        .json({ success: true, message: "Login successful", user: user.id });
     } catch (error) {
       console.error(error);
       return res.status(500).json({ error: "Unable to login" });

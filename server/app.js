@@ -16,12 +16,26 @@ const limiter = rateLimit({
 });
 app.use(limiter);
 
-app.use(cors());
+// Configura CORS para permitir solicitudes desde http://localhost:5173
+const corsOptions = {
+  origin: "http://localhost:5173",
+  credentials: true, // Habilita el intercambio de cookies entre dominios
+};
+
+app.use(cors(corsOptions));
 app.use(cookieParser());
 app.set("view engine", "ejs");
 app.use(express.static(__dirname + "/public"));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+
+app.use((req, res, next) => {
+  res.setHeader("Access-Control-Allow-Origin", "http://localhost:5173");
+  res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
+  res.setHeader("Access-Control-Allow-Credentials", true);
+  next();
+});
 
 // Importa los modelos
 const User = require("./src/models/User");
