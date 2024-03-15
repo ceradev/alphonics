@@ -2,7 +2,7 @@ const User = require("../models/User");
 
 class AuthController {
   // Método para registrar un nuevo usuario
-  register = async (req, res) => {
+  signup = async (req, res) => {
     try {
       const userData = req.body;
 
@@ -27,16 +27,18 @@ class AuthController {
       const user = await User.create(userData);
 
       // Generar token JWT
-      const accessToken = this.generateToken(user.id, "access");
-      const refreshToken = this.generateToken(user.id, "refresh");
+      const accessToken = this.generateToken.bind(this)(user.id);
 
       // Establecer tokens en cookies
-      res.cookie("accessToken", accessToken, { httpOnly: true });
-      res.cookie("refreshToken", refreshToken, { httpOnly: true });
+      res.cookie("accessToken", accessToken);
 
       return res
         .status(201)
-        .json({ success: true, message: "User registered successfully", user : user.id });
+        .json({
+          success: true,
+          message: "User registered successfully",
+          user: { id: user.id, token: accessToken },
+        });
     } catch (error) {
       console.error(error);
       return res.status(500).json({ error: "Unable to register user" });
@@ -64,16 +66,18 @@ class AuthController {
       }
 
       // Generar token JWT
-      const accessToken = this.generateToken(user.id, "access");
-      const refreshToken = this.generateToken(user.id, "refresh");
+      const accessToken = this.generateToken.bind(this)(user.id);
 
       // Establecer tokens en cookies
-      res.cookie("accessToken", accessToken, { httpOnly: true });
-      res.cookie("refreshToken", refreshToken, { httpOnly: true });
+      res.cookie("accessToken", accessToken);
 
       return res
         .status(200)
-        .json({ success: true, message: "Login successful", user: user.id });
+        .json({
+          success: true,
+          message: "Login successful",
+          user: { id: user.id, token: accessToken },
+        });
     } catch (error) {
       console.error(error);
       return res.status(500).json({ error: "Unable to login" });
@@ -98,7 +102,7 @@ class AuthController {
         error: "Unable to logout",
       });
     }
-  }
+  };
 
   // Método para restablecer la contraseña del usuario
   resetPassword = async (req, res) => {
@@ -140,7 +144,7 @@ class AuthController {
         error: "Unable to reset password",
       });
     }
-  }
+  };
 
   // Función para validar datos de usuario
   validateUserData(userData) {
@@ -175,16 +179,11 @@ class AuthController {
   }
 
   // Función para generar token JWT
-  generateToken(userId, type) {
+  generateToken(userId) {
     const jwt = require("jsonwebtoken");
     // Credenciales del token
-    const secret =
-      type === "access"
-        ? process.env.ACCESS_TOKEN
-        : process.env.REFRESH_TOKEN;
-    const expiresIn = type === "access" ? "1h" : "1d";
-    return jwt.sign({ id: userId }, secret, {
-      expiresIn: expiresIn,
+    return jwt.sign({ id: userId }, process.env.ACCESS_TOKEN, {
+      expiresIn: "1d",
     });
   }
 }

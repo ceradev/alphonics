@@ -4,7 +4,7 @@ const AuthController = require('../controllers/authController');
 const authController = new AuthController();
 
 // Route for user registration
-router.post('/register' ,authController.register);
+router.post('/signup' ,authController.signup);
 
 // Route for user login
 router.post('/login' ,authController.login);
