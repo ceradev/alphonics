@@ -1,6 +1,8 @@
 const User = require("../models/User");
 
 class AuthController {
+
+  
   // Método para registrar un nuevo usuario
   signup = async (req, res) => {
     try {
