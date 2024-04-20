@@ -6,6 +6,7 @@ import LoginForm from "./components/LoginForm";
 import SignupForm from "./components/SignupForm";
 import Profile from './components/Profile';
 import Settings from './components/Settings';
+import Subscription from "./components/Subscription";
 
 const App = () => {
   return (
@@ -17,7 +18,8 @@ const App = () => {
           <Route path="/login" element={<LoginForm />} />
           <Route path="/signup" element={<SignupForm />} />
           <Route path='/profile' element={<Profile />} />
-          <Route path="/settings" element={<Settings />} /> 
+          <Route path="/settings" element={<Settings />} />
+          <Route path="/subscription" element={<Subscription />} />
         </Routes>
     </Router>
   );
