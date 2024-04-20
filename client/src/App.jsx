@@ -7,6 +7,9 @@ import SignupForm from "./components/SignupForm";
 import Profile from './components/Profile';
 import Settings from './components/Settings';
 import Subscription from "./components/Subscription";
+import InsideAlbum from "./components/InsideAlbum";
+import AboutUs from "./components/AboutUs.jsx";
+import Contact from "./components/Contact.jsx";
 
 const App = () => {
   return (
@@ -20,6 +23,9 @@ const App = () => {
           <Route path='/profile' element={<Profile />} />
           <Route path="/settings" element={<Settings />} />
           <Route path="/subscription" element={<Subscription />} />
+          <Route path="/album/:id" element={<InsideAlbum />} />
+          <Route path="/about-us" element={<AboutUs />} />
+          <Route path="/contact" element={<Contact />} />
         </Routes>
     </Router>
   );
