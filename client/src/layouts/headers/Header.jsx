@@ -1,7 +1,6 @@
 import { useState } from "react";
 import logo from "../../assets/images/logo.png";
 import { LuLibrary } from "react-icons/lu";
-import { CgProfile } from "react-icons/cg";
 import { TbMusicSearch } from "react-icons/tb";
 import { FaHome, FaUser } from "react-icons/fa";
 import { useEffect } from "react";
@@ -20,7 +19,8 @@ const Header = () => {
   };
 
   const handleLogout = () => {
-    sessionStorage.removeItem("user");
+    sessionStorage.removeItem("USER_ACCESS_TOKEN");
+    sessionStorage.removeItem("SPOTIFY_ACCESS_TOKEN");
     setIsAuth(false);
     window.location.reload();
   };
@@ -77,10 +77,10 @@ const Header = () => {
               </svg>
             </button>
           </div>
-          <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
+          <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start" style={{color: 'var(--text-color)', backgroundColor: 'var(--bg-color)'}}>
             <div className="flex flex-shrink-0 items-center mr-4">
               <img
-                className="h-24 w-auto cursor-pointer hover:transition-transform duration-300 hover:transform hover:scale-110"
+                className="h-28 w-auto cursor-pointer hover:transition-transform duration-300 hover:transform hover:scale-105"
                 src={logo}
                 alt="Alphonics Logo"
                 onClick={() => window.location.assign("/")}
@@ -89,25 +89,28 @@ const Header = () => {
             <div className="hidden sm:flex space-x-4">
               <a
                 href="/"
-                className="flex items-center text-gray-300 hover:transition-colors duration-300 hover:text-white rounded-md px-3 py-2 text-sm font-medium"
+                className="flex items-center text-sm font-medium text-gray-300 hover:text-white transition-colors duration-300 rounded-md px-2 py-1"
                 aria-current="page"
               >
-                <FaHome className="h-4 w-4 mr-1" />
-                Home
+                <FaHome className="h-6 w-6 mr-2 opacity-75 transition duration-150 ease-in-out group-hover:opacity-100"
+                />
+                <span className="transition duration-150 ease-in-out group-hover:text-white">Home</span>
               </a>
               <a
                 href="/discover"
-                className="flex items-center text-gray-300 hover:transition-colors duration-300 hover:text-white rounded-md px-3 py-2 text-sm font-medium"
+                className="flex items-center text-sm font-medium text-gray-300 hover:text-white transition-colors duration-300 rounded-md px-2 py-1"
               >
-                <TbMusicSearch className="h-4 w-4 mr-1" />
-                Discover
+                <TbMusicSearch className="h-6 w-6 mr-2 opacity-75 transition duration-150 ease-in-out group-hover:opacity-100"
+                />
+                <span className="transition duration-150 ease-in-out group-hover:text-white">Discover</span>
               </a>
               <a
                 href="/library"
-                className="flex items-center text-gray-300 hover:transition-colors duration-300 hover:text-white rounded-md px-3 py-2 text-sm font-medium"
+                className="flex items-center text-sm font-medium text-gray-300 hover:text-white transition-colors duration-300 rounded-md px-2 py-1"
               >
-                <LuLibrary className="h-4 w-4 mr-1" />
-                Library
+                <LuLibrary className="h-6 w-6 mr-2 opacity-75 transition duration-150 ease-in-out group-hover:opacity-100"
+                />
+                <span className="transition duration-150 ease-in-out group-hover:text-white">Library</span>
               </a>
             </div>
           </div>
@@ -125,7 +128,7 @@ const Header = () => {
                   >
                     <span className="absolute -inset-1.5"></span>
                     <span className="sr-only">Open user menu</span>
-                    <CgProfile className="h-7 w-7 group-hover:text-red-500 text-gray-300 transition-colors duration-300" />
+                    <FaUser className="h-7 w-7 text-gray-300 group-hover:scale-110 transition-transform duration-300  " />
                   </button>
                 </div>
                 {isOpenProfile && (
@@ -138,7 +141,7 @@ const Header = () => {
                   >
                     <a
                       href="/profile"
-                      className="block px-4 py-2 text-sm text-gray-700 transition-colors duration-300 hover:bg-gray-20"
+                      className="block px-4 py-2 text-sm text-gray-700 transition-colors duration-300 hover:bg-gray-20 hover:shadow-md"
                       role="menuitem"
                       tabIndex="-1"
                       id="user-menu-item-0"
@@ -147,7 +150,7 @@ const Header = () => {
                     </a>
                     <a
                       href="/settings"
-                      className="block px-4 py-2 text-sm text-gray-700 transition-colors duration-300 hover:bg-gray-200"
+                      className="block px-4 py-2 text-sm text-gray-700 transition-colors duration-300 hover:bg-gray-200 hover:shadow-md"
                       role="menuitem"
                       tabIndex="-1"
                       id="user-menu-item-1"
@@ -156,7 +159,7 @@ const Header = () => {
                     </a>
                     <button
                       onClick={handleLogout}
-                      className="block px-4 py-2 text-sm text-gray-700 transition-colors duration-300 hover:bg-gray-200 hover:text-red-500"
+                      className="block px-4 py-2 text-sm text-gray-700 transition-colors duration-300 hover:bg-gray-200 hover:shadow-md hover:text-red-500"
                       role="menuitem"
                       tabIndex="-1"
                       id="user-menu-item-2"

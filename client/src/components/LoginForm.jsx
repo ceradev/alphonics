@@ -8,12 +8,12 @@ const LoginForm = () => {
   const [error, setError] = useState("");
   const CLIENT_ID = "e269b673d31546e6a6b44f63f4aeadc0";
   const CLIENT_SECRET = "1f1ca0920b104536bb29efd3d84c784a";
-  
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
-      const response = await fetch("http://localhost:3000/auth/login", {
+      const responseAPI = await fetch("http://localhost:3000/auth/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -21,53 +21,39 @@ const LoginForm = () => {
         body: JSON.stringify({ username, password }),
       });
 
-      const data = await response.json();
+      const dataUser = await responseAPI.json();
 
-      if (data.success) {
-        let authOptions = {
-          url: "https://accounts.spotify.com/api/token",
-          headers: {
-            Authorization:
-              "Basic " +
-              new Buffer.from(clientId + ":" + clientSecret).toString("base64"),
-          },
-          form: {
-            grant_type: "client_credentials",
-          },
-          json: true,
-        };
-
-        const token = await fetch(authOptions.url, {
-          method: "POST",
-          headers: authOptions.headers,
-          body: authOptions.form,
-        });
-
-        // Obtener el token de acceso de la respuesta
-        const tokenData = await token.json();
+      if (dataUser.success) {
+        // Establecer el token de acceso en una variable de sesión
+        sessionStorage.setItem("USER_ACCESS_TOKEN", dataUser.user.token);
 
         // Obtener el token de acceso a la API de Spotify
-        const response = await fetch("https://accounts.spotify.com/api/token", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/x-www-form-urlencoded",
-          },
-          body: `grant_type=client_credentials&client_id=${CLIENT_ID}&client_secret=${CLIENT_SECRET}`,
-        });
-        if (!response.ok) {
-          throw new Error("Failed to fetch access token");
+        const responseSpotify = await fetch(
+          "https://accounts.spotify.com/api/token",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/x-www-form-urlencoded",
+            },
+            body: `grant_type=client_credentials&client_id=${CLIENT_ID}&client_secret=${CLIENT_SECRET}`,
+          }
+        );
+        if (!responseSpotify.ok) {
+          throw new Error("Failed to fetch access token from Spotify API");
         }
 
-        const data = await response.json();
-        sessionStorage.setItem("SPOTIFY_ACCESS_TOKEN", data.access_token);
-
-        // Guardar los datos del usuario en la sesión
+        const dataSpotify = await responseSpotify.json();
         sessionStorage.setItem(
-          "USER_ACCESS_TOKEN",
-          JSON.stringify(tokenData.access_token)
+          "SPOTIFY_ACCESS_TOKEN",
+          dataSpotify.access_token
         );
+ 
+        console.log("Login successful with Spotify access token and Alphonics access token");
+
+        // Redirigir a la página principal
+        window.location.href = "/";
       } else {
-        setError(data.error);
+        setError(dataUser.error);
 
         setTimeout(() => {
           setError("");

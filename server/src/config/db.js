@@ -21,25 +21,5 @@ const sequelize = new Sequelize(
   }
 );
 
-// Verifica la existencia de la base de datos
-sequelize
-  .sync({ force: true })
-  .then(() => {
-    console.log("Base de datos sincronizada");
-  })
-  .catch((error) => {
-    console.error("Error al sincronizar la base de datos:", error);
-  });
-
-// Verifica la conexión a la base de datos
-sequelize
-  .authenticate()
-  .then(() => {
-    console.log("Conexión exitosa a la base de datos");
-  })
-  .catch((error) => {
-    console.error("Error al conectar a la base de datos:", error);
-  });
-
 // Exporta la instancia de Sequelize
 module.exports = sequelize;

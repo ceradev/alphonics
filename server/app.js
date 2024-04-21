@@ -7,7 +7,9 @@ const cors = require("cors");
 const createTestUsers = require("./src/utils/createTestUsers");
 const verifyToken = require("./src/middleware/verifyToken");
 const port = process.env.PORT || 3000;
-
+const sequelize = require("./src/config/db");
+const User = require("./src/models/User");
+const Playlist = require("./src/models/Playlist");
 const app = express();
 
 // Middleware de seguridad
@@ -41,8 +43,25 @@ app.use((req, res, next) => {
   next();
 });
 
-// Crea algunos usuarios de prueba
-createTestUsers();
+// Verifica la existencia de la base de datos
+sequelize
+  .sync({ force: false })
+  .then(() => {
+    console.log("Base de datos sincronizada");
+  })
+  .catch((error) => {
+    console.error("Error al sincronizar la base de datos:", error);
+  });
+
+// Verifica la conexión a la base de datos
+sequelize
+  .authenticate()
+  .then(() => {
+    console.log("Conexión exitosa a la base de datos");
+  })
+  .catch((error) => {
+    console.error("Error al conectar a la base de datos:", error);
+  });
 
 // Usar las rutas en la aplicación
 app.use("/api/v1/users", verifyToken ,require("./src/routes/users.route.js"));
@@ -53,3 +72,5 @@ app.use("/auth", require("./src/routes/auth.route.js"));
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);
 });
+
+createTestUsers();

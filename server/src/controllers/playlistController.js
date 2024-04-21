@@ -1,4 +1,4 @@
-const { Playlist } = require("../models/Playlist");
+const Playlist  = require("../models/Playlist");
 
 class PlaylistController {
   getAllPlaylists(req, res) {
