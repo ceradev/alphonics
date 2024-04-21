@@ -1,6 +1,7 @@
-import { Model, DataTypes } from "sequelize";
-import sequelize from "../config/db";
-export default class Playlist extends Model {
+const { Model, DataTypes } = require("sequelize");
+const sequelize = require("../config/db");
+
+class Playlist extends Model {
   static associate(models) {
     Playlist.belongsTo(models.User, {
       foreignKey: "user_id",
@@ -75,3 +76,5 @@ Playlist.init(
     timestamps: false,
   }
 );
+
+module.exports = Playlist;

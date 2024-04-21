@@ -1,7 +1,9 @@
-const { Model, DataTypes } = require('sequelize');
-const bcrypt = require('bcrypt');
-const sequelize = require('../config/db').default;
-export default class User extends Model {
+const { Model, DataTypes } = require("sequelize");
+const bcrypt = require("bcrypt");
+const sequelize = require("../config/db");
+const Playlist = require("./Playlist");
+
+class User extends Model {
   static associate(models) {
     User.hasMany(models.Playlist, {
       foreignKey: 'user_id',

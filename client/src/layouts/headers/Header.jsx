@@ -26,7 +26,7 @@ const Header = () => {
   };
 
   useEffect(() => {
-    if (sessionStorage.getItem("user")) {
+    if (sessionStorage.getItem("USER_ACCESS_TOKEN") !== null) {
       setIsAuth(true);
     } else {
       setIsAuth(false);
@@ -114,23 +114,23 @@ const Header = () => {
           {isAuth ? (
             <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
               <div className="relative ml-3">
-                <div>
+                <div className="group">
                   <button
                     type="button"
                     onClick={toogleProfile}
-                    className="relative flex rounded-full text-sm hover:transition-all duration-300 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-red-500"
+                    className="relative flex items-center rounded-full focus:outline-none focus:ring-2 focus:ring-inset focus:ring-red-500"
                     id="user-menu-button"
                     aria-expanded={isOpenProfile ? "true" : "false"}
                     aria-haspopup="true"
                   >
                     <span className="absolute -inset-1.5"></span>
                     <span className="sr-only">Open user menu</span>
-                    <CgProfile className="h-7 w-7 text-gray-300" />
+                    <CgProfile className="h-7 w-7 group-hover:text-red-500 text-gray-300 transition-colors duration-300" />
                   </button>
                 </div>
                 {isOpenProfile && (
                   <div
-                    className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-gray-300 py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
+                    className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
                     role="menu"
                     aria-orientation="vertical"
                     aria-labelledby="user-menu-button"
@@ -138,7 +138,7 @@ const Header = () => {
                   >
                     <a
                       href="/profile"
-                      className="block px-4 py-2 text-sm text-gray-700 transition-colors duration-300 hover:text-red-500"
+                      className="block px-4 py-2 text-sm text-gray-700 transition-colors duration-300 hover:bg-gray-20"
                       role="menuitem"
                       tabIndex="-1"
                       id="user-menu-item-0"
@@ -147,7 +147,7 @@ const Header = () => {
                     </a>
                     <a
                       href="/settings"
-                      className="block px-4 py-2 text-sm text-gray-700 transition-colors duration-300 hover:text-red-500"
+                      className="block px-4 py-2 text-sm text-gray-700 transition-colors duration-300 hover:bg-gray-200"
                       role="menuitem"
                       tabIndex="-1"
                       id="user-menu-item-1"
@@ -156,7 +156,7 @@ const Header = () => {
                     </a>
                     <button
                       onClick={handleLogout}
-                      className="block px-4 py-2 text-sm text-gray-700 transition-colors duration-300 hover:text-red-500"
+                      className="block px-4 py-2 text-sm text-gray-700 transition-colors duration-300 hover:bg-gray-200 hover:text-red-500"
                       role="menuitem"
                       tabIndex="-1"
                       id="user-menu-item-2"
@@ -168,52 +168,22 @@ const Header = () => {
               </div>
             </div>
           ) : (
-            <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
-            <div className="relative ml-3">
-              <div>
-                <button
-                  type="button"
-                  onClick={toogleProfile}
-                  className="relative flex rounded-full text-smcursor-pointer hover:transition-transform duration-300 hover:transform hover:scale-110"
-                  id="user-menu-button"
-                  aria-expanded={isOpenProfile ? "true" : "false"}
-                  aria-haspopup="true"
-                >
-                  <span className="absolute -inset-1.5"></span>
-                  <span className="sr-only">Open user menu</span>
-                  <FaUser className="h-7 w-7 text-gray-300" />
-                </button>
-              </div>
-              {isOpenProfile && (
-                <div
-                  className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-gray-300 py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
-                  role="menu"
-                  aria-orientation="vertical"
-                  aria-labelledby="user-menu-button"
-                  tabIndex="-1"
-                >
-                  <a
-                    href="/signup"
-                    className="block px-4 py-2 text-sm text-gray-700 transition-colors duration-300 hover:text-red-500"
-                    role="menuitem"
-                    tabIndex="-1"
-                    id="user-menu-item-0"
-                  >
-                    Sign Up
-                  </a>
-                  <a
-                    href="/login"
-                    className="block px-4 py-2 text-sm text-gray-700 transition-colors duration-300 hover:text-red-500"
-                    role="menuitem"
-                    tabIndex="-1"
-                    id="user-menu-item-1"
-                  >
-                    Log In
-                  </a>
-                </div>
-              )}
+            <div className="flex items-center gap-4">
+              <button
+                type="button"
+                className="bg-white text-red-500 px-4 py-2 rounded-md shadow-md transition-all duration-300 hover:bg-gray-200 focus:outline-none"
+                onClick={() => window.location.assign('/login')}
+              >
+                Log In
+              </button>
+              <button
+                type="button"
+                className="bg-white text-red-500 px-4 py-2 rounded-md shadow-md transition-all duration-300 hover:bg-gray-200 focus:outline-none"
+                onClick={() => window.location.assign('/signup')}
+              >
+                Sign Up
+              </button>
             </div>
-          </div>
           )}
         </div>
       </div>
@@ -224,7 +194,7 @@ const Header = () => {
         <div className="space-y-1 px-2 pb-3 pt-2">
           <a
             href="/"
-            className="flex items-center text-gray-300 hover:transition-colors duration-300 hover:text-white block rounded-md px-3 py-2 text-base font-medium"
+            className="flex items-center text-gray-300 hover:transition-colors duration-300 hover:text-white rounded-md px-3 py-2 text-base font-medium"
             aria-current="page"
           >
             <FaHome className="h-4 w-4 mr-1" />
@@ -232,14 +202,14 @@ const Header = () => {
           </a>
           <a
             href="/discover"
-            className="flex items-center text-gray-300 hover:transition-colors duration-300 hover:text-white block rounded-md px-3 py-2 text-base font-medium"
+            className="flex items-center text-gray-300 hover:transition-colors duration-300 hover:text-white rounded-md px-3 py-2 text-base font-medium"
           >
             <TbMusicSearch className="h-4 w-4 mr-1" />
             Discover
           </a>
           <a
             href="/library"
-            className="flex items-center text-gray-300 hover:transition-colors duration-300 hover:text-white block rounded-md px-3 py-2 text-base font-medium"
+            className="flex items-center text-gray-300 hover:transition-colors duration-300 hover:text-white rounded-md px-3 py-2 text-base font-medium"
           >
             <LuLibrary className="h-4 w-4 mr-1" />
             Library

@@ -1,21 +1,17 @@
-import "dotenv/config";
-import express from "express";
-import rateLimit from "express-rate-limit"; // Middleware de limitación de velocidad
-import cookieParser from "cookie-parser";
-import { fileURLToPath } from "url";
-import { dirname } from "path";
-import { createRequire } from "module";
-const require = createRequire(import.meta.url);
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-import "./src/config/db.js";
-import cors from "cors";
-import Playlist from "./src/models/Playlist.js";
-import User from "./src/models/User.js";
-import createTestUsers from "./src/utils/createTestUsers.js";
-import verifyToken from "./src/middleware/verifyToken.js";
+require("dotenv").config();
+const express = require("express");
+const rateLimit = require("express-rate-limit");
+const cookieParser = require("cookie-parser");
+const helmet = require("helmet");
+const cors = require("cors");
+const createTestUsers = require("./src/utils/createTestUsers");
+const verifyToken = require("./src/middleware/verifyToken");
+const port = process.env.PORT || 3000;
 
 const app = express();
+
+// Middleware de seguridad
+app.use(helmet());
 
 // Middleware de limitación de velocidad
 const limiter = rateLimit({
@@ -45,30 +41,15 @@ app.use((req, res, next) => {
   next();
 });
 
-(async () => {
-  try {
-    await import("./src/config/db.js").then((mod) => mod.default());
-    await import("./src/models/User.js").then((mod) => mod.default());
-    await import("./src/models/Playlist.js").then((mod) => mod.default());
-    await import("./src/utils/createTestUsers.js").then((mod) => mod.default());
+// Crea algunos usuarios de prueba
+createTestUsers();
 
-    // Inicializa las asociaciones
-    User.associate({ Playlist });
-    Playlist.associate({ User });
+// Usar las rutas en la aplicación
+app.use("/api/v1/users", verifyToken ,require("./src/routes/users.route.js"));
+app.use("/api/v1/playlists", verifyToken ,require("./src/routes/playlist.route.js"));
+app.use("/auth", require("./src/routes/auth.route.js"));
 
-    // Crea los usuarios de prueba
-    await createTestUsers();
-
-    // Routes for authentication and user management
-    app.use("/api/v1/users", verifyToken, await import("./src/routes/users.route.js"));
-    app.use("/api/v1/playlists", verifyToken, await import("./src/routes/playlist.route.js"));
-    app.use("/auth", await import("./src/routes/auth.route.js"));
-
-    app.listen(process.env.APP_PORT, () => {
-      console.log(`Server is running on port ${process.env.APP_PORT}.`);
-    });
-  } catch (err) {
-    console.error("Error al conectar a la base de datos:", err);
-  }
-})();
-
+// Iniciar el servidor
+app.listen(port, () => {
+  console.log(`Server running on port ${port}`);
+});

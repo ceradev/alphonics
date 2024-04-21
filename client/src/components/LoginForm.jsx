@@ -6,9 +6,9 @@ const LoginForm = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-  const clientId = "e269b673d31546e6a6b44f63f4aeadc0";
-  const clientSecret = "1f1ca0920b104536bb29efd3d84c784a";
-
+  const CLIENT_ID = "e269b673d31546e6a6b44f63f4aeadc0";
+  const CLIENT_SECRET = "1f1ca0920b104536bb29efd3d84c784a";
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -24,35 +24,48 @@ const LoginForm = () => {
       const data = await response.json();
 
       if (data.success) {
-        const user = {
-          id: data.user.id,
-          token: data.user.token,
-        };
-
-        var authOptions = {
-          url: 'https://accounts.spotify.com/api/token',
+        let authOptions = {
+          url: "https://accounts.spotify.com/api/token",
           headers: {
-            'Authorization': 'Basic ' + (new Buffer.from(clientId + ':' + clientSecret).toString('base64'))
+            Authorization:
+              "Basic " +
+              new Buffer.from(clientId + ":" + clientSecret).toString("base64"),
           },
           form: {
-            grant_type: 'client_credentials'
+            grant_type: "client_credentials",
           },
-          json: true
+          json: true,
         };
-        
+
         const token = await fetch(authOptions.url, {
-          method: 'POST',
+          method: "POST",
           headers: authOptions.headers,
-          body: authOptions.form
+          body: authOptions.form,
         });
+
+        // Obtener el token de acceso de la respuesta
         const tokenData = await token.json();
-        console.log(tokenData.access_token);
+
+        // Obtener el token de acceso a la API de Spotify
+        const response = await fetch("https://accounts.spotify.com/api/token", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+          },
+          body: `grant_type=client_credentials&client_id=${CLIENT_ID}&client_secret=${CLIENT_SECRET}`,
+        });
+        if (!response.ok) {
+          throw new Error("Failed to fetch access token");
+        }
+
+        const data = await response.json();
+        sessionStorage.setItem("SPOTIFY_ACCESS_TOKEN", data.access_token);
 
         // Guardar los datos del usuario en la sesión
-        sessionStorage.setItem("user", JSON.stringify(user));
-        
-        // Redirigir a la página de inicio
-        location.href = "/";
+        sessionStorage.setItem(
+          "USER_ACCESS_TOKEN",
+          JSON.stringify(tokenData.access_token)
+        );
       } else {
         setError(data.error);
 
