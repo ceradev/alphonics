@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { Card, Col, Row } from "react-bootstrap";
 
 const GenresList = ({ setView, setSelectedGenre }) => {
   const [genres, setGenres] = useState([]);
@@ -75,29 +74,28 @@ const GenresList = ({ setView, setSelectedGenre }) => {
   };
 
   return (
-    <div>
-      <h2>Genres</h2>
-      <Row xs={1} md={4} className="g-4">
+    <div className="w-full">
+      <h1 className="text-2xl font-bold mb-4">Genres</h1>
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
         {loading ? (
           <p>Loading genres...</p>
         ) : (
           genres.map((genre, index) => (
-            <Col key={index}>
-              <Card style={{ cursor: "pointer" }} onClick={() => handleGenreSelect({ id: genre.id, name: genre.name })}>
-                <Card.Img variant="top" src={genre.icons[0]?.url} />
-                <Card.Body>
-                  <Card.Title>{genre.name}</Card.Title>
-                </Card.Body>
-              </Card>
-            </Col>
+            <div key={index} className="bg-white rounded-lg shadow-md overflow-hidden cursor-pointer" onClick={() => handleGenreSelect({ id: genre.id, name: genre.name })}>
+              <img src={genre.icons[0]?.url} alt={genre.name} className="h-48 w-full object-cover" />
+              <div className="p-4">
+                <h2 className="text-xl font-bold">{genre.name}</h2>
+              </div>
+            </div>
           ))
         )}
-      </Row>
+      </div>
     </div>
   );
 };
 
 export default GenresList;
+
 
 //Este codigo de abajo esta utilizando ApiAccessTokenProvider para obtener el token de acceso
 

@@ -10,6 +10,7 @@ import Subscription from "./components/Subscription";
 import InsideAlbum from "./components/InsideAlbum";
 import AboutUs from "./components/AboutUs.jsx";
 import Contact from "./components/Contact.jsx";
+import InsidePlaylists from "./components/InsidePlaylists";
 
 const App = () => {
   return (
@@ -26,6 +27,7 @@ const App = () => {
           <Route path="/album/:id" element={<InsideAlbum />} />
           <Route path="/about-us" element={<AboutUs />} />
           <Route path="/contact" element={<Contact />} />
+          <Route path="/inside-playlists/:id" element={<InsidePlaylists />} />
         </Routes>
     </Router>
   );

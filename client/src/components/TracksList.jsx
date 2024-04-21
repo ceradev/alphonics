@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from "react";
-import { Card, Col, Row, Button } from "react-bootstrap";
+import { useParams, useNavigate } from 'react-router-dom';
+
+const CLIENT_ID = "e269b673d31546e6a6b44f63f4aeadc0";
+const CLIENT_SECRET = "1f1ca0920b104536bb29efd3d84c784a";
 
 const TracksList = ({ selectedGenre, setView, setSelectedGenre }) => {
   const [tracks, setTracks] = useState([]);
   const [loading, setLoading] = useState(true);
   const [accessToken, setAccessToken] = useState("");
-
-  const CLIENT_ID = "e269b673d31546e6a6b44f63f4aeadc0";
-  const CLIENT_SECRET = "1f1ca0920b104536bb29efd3d84c784a";
+  const navigate = useNavigate();
 
   useEffect(() => {
     // API Access Token
@@ -75,31 +76,31 @@ const TracksList = ({ selectedGenre, setView, setSelectedGenre }) => {
   };
 
   return (
-    <div>
-      <Button onClick={handleBackToGenres} variant="secondary">Back</Button>
-      <h2>{selectedGenre ? `Top tracks for ${selectedGenre.name}` : "Loading..."}</h2> {/* Mostrar el nombre del género */}
-      <Row xs={1} md={3} className="g-4">
+    <div style={{ background: 'linear-gradient(to bottom, #FF0000, #FFFFFF)', padding: '1rem' }}>
+      <button onClick={handleBackToGenres} style={{ background: '#0000FF', color: '#FFFFFF', fontWeight: 'bold', padding: '0.5rem 1rem', borderRadius: '0.25rem', marginBottom: '1rem', border: 'none', cursor: 'pointer' }}>Back</button>
+      <h2 style={{ color: '#FFFFFF' }}>{selectedGenre ? `Top tracks for ${selectedGenre.name}` : "Loading..."}</h2>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))', gap: '1rem' }}>
         {loading ? (
           <p>Loading tracks...</p>
         ) : (
           tracks.map((track, index) => (
-            <Col key={index}>
-              <Card>
-                <Card.Img variant="top" src={track.track.album.images[0]?.url} />
-                <Card.Body>
-                  <Card.Title>{track.track.name}</Card.Title>
-                  <Card.Subtitle>{track.track.artists[0].name}</Card.Subtitle>
-                </Card.Body>
-              </Card>
-            </Col>
+            <div key={index} style={{ background: '#FFFFFF', borderRadius: '0.5rem', boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)', overflow: 'hidden' }}>
+              <img src={track.track.album.images[0]?.url} alt={track.track.name} style={{ width: '100%', objectFit: 'cover', height: '200px' }} />
+              <div style={{ padding: '1rem' }}>
+                <h2 style={{ fontSize: '1.5rem', fontWeight: 'bold' }}>{track.track.name}</h2>
+                <p style={{ fontSize: '0.875rem', color: '#666' }}>{track.track.artists[0].name}</p>
+              </div>
+            </div>
           ))
         )}
-      </Row>
+      </div>
     </div>
   );
 };
 
 export default TracksList;
+
+
 
 
 //Este codigo de abajo esta utilizando ApiAccessTokenProvider para obtener el token de acceso

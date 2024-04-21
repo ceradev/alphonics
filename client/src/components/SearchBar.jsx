@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { InputGroup, FormControl, Button, Container, Row, Card } from 'react-bootstrap';
-import { Link, useLocation } from 'react-router-dom'; 
-import './SearchBar.css';
+import { FaSearch } from 'react-icons/fa'; // Importamos el icono de búsqueda de React Icons
+import { Link, useLocation } from 'react-router-dom';
 
 const CLIENT_ID = "e269b673d31546e6a6b44f63f4aeadc0";
 const CLIENT_SECRET = "1f1ca0920b104536bb29efd3d84c784a";
@@ -100,7 +99,7 @@ const SearchBar = ({ onSearch, onGenresVisibilityChange }) => {
         throw new Error('Failed to fetch artist albums');
       }
       const data = await response.json();
-      return data.items;
+      return data.items.sort((a, b) => a.name.localeCompare(b.name)); // Ordenar por nombre del álbum
     } catch (error) {
       console.error("Error fetching artist albums:", error);
       return [];
@@ -121,7 +120,7 @@ const SearchBar = ({ onSearch, onGenresVisibilityChange }) => {
         throw new Error('Failed to fetch artist top tracks');
       }
       const data = await response.json();
-      return data.tracks;
+      return data.tracks.sort((a, b) => a.name.localeCompare(b.name)); // Ordenar por nombre de la canción
     } catch (error) {
       console.error("Error fetching artist top tracks:", error);
       return [];
@@ -129,80 +128,88 @@ const SearchBar = ({ onSearch, onGenresVisibilityChange }) => {
   };
 
   return (
-    <Container>
-      <InputGroup className="mb-3" size="lg">
-        <FormControl
-          placeholder="Search for an artist, song, or album..."
-          type="input"
-          value={searchInput}
-          onChange={(event) => setSearchInput(event.target.value)}
-          onKeyDown={(event) => {
-            if (event.key === "Enter") {
-              search(); 
-            }
-          }}
-        />
-        <Button variant="primary" onClick={search}>Search</Button>
-      </InputGroup>
+    <div>
+      <div className="w-full bg-gradient-to-b from-red-500 to-white p-4">
+        <div className="flex items-center">
+          <input
+            type="text"
+            placeholder="Search for an artist, song, or album..."
+            value={searchInput}
+            onChange={(event) => setSearchInput(event.target.value)}
+            onKeyDown={(event) => {
+              if (event.key === "Enter") {
+                search(); 
+              }
+            }}
+            className="w-full py-2 px-4 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:border-blue-400 mr-2"
+          />
+          <button
+            onClick={search}
+            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:ring focus:ring-blue-400"
+          >
+            <FaSearch />
+          </button>
+        </div>
+      </div>
       {loading && <p>Loading...</p>}
       {artist && (
-        <Row>
-          <Card>
-            <Card.Body>
-              {artist.images && (
-                <img
-                  src={artist.images[0]?.url}
-                  alt="Artist"
-                  className="artist-image"
-                />
-              )}
-              {artist.name && <h2>{artist.name}</h2>}
-            </Card.Body>
-          </Card>
-        </Row>
-      )}
-      {albums.length > 0 && (
-        <Row>
-          <Card>
-            <Card.Body>
-              <h3>Albums</h3>
-              <Row className="row-cols-4">
-                {albums.map((album, i) => (
-                  <Link to={{ pathname: `/album/${album.id}`, state: { previousPath: location.pathname } }} key={i} className="album-link">
-                    <Card key={i} className="album-card">
-                      <Card.Img src={album.images?.[0]?.url || ""} />
-                      <Card.Body>
-                        <Card.Title>{album.name}</Card.Title>
-                      </Card.Body>
-                    </Card>
+        <div className="w-full bg-gradient-to-b from-red-500 to-white">
+          <div className="text-center">
+            {artist.images && (
+              <img
+                src={artist.images[0]?.url}
+                alt="Artist"
+                className="mx-auto mt-8 mb-4 rounded-full shadow-lg"
+              />
+            )}
+            {artist.name && <h2>{artist.name}</h2>}
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <h2 className="text-2xl font-bold mb-4 text-center">Albums</h2>
+              <div className="grid grid-cols-2 gap-4">
+                {albums.map((album, index) => (
+                  <Link
+                    to={{ pathname: `/album/${album.id}`, state: { previousPath: location.pathname } }}
+                    key={index}
+                    className="album-link"
+                  >
+                    <div className="bg-white rounded-lg shadow-md overflow-hidden">
+                      <img
+                        src={album.images[0]?.url}
+                        alt={album.name}
+                        className="h-48 w-full object-cover"
+                      />
+                      <div className="p-4">
+                        <h3 className="text-lg font-bold">{album.name}</h3>
+                      </div>
+                    </div>
                   </Link>
                 ))}
-              </Row>
-            </Card.Body>
-          </Card>
-        </Row>
-      )}
-      {tracks.length > 0 && (
-        <Row>
-          <Card>
-            <Card.Body>
-              <h3>Tracks</h3>
-              <Row className="row-cols-4">
-                {tracks.map((track, i) => (
-                  <Card key={i} className="track-card">
-                    <Card.Img src={track.album.images?.[0]?.url || ""} />
-                    <Card.Body>
-                      <Card.Title>{track.name}</Card.Title>
-                    </Card.Body>
-                  </Card>
+              </div>
+            </div>
+            <div>
+              <h2 className="text-2xl font-bold mb-4 text-center">Top Tracks</h2>
+              <div className="grid grid-cols-2 gap-4">
+                {tracks.map((track, index) => (
+                  <div key={index} className="bg-white rounded-lg shadow-md overflow-hidden">
+                    <img
+                      src={track.album.images[0]?.url}
+                      alt={track.name}
+                      className="h-48 w-full object-cover"
+                    />
+                    <div className="p-4">
+                      <h3 className="text-lg font-bold">{track.name}</h3>
+                      <p>{track.artists[0].name}</p>
+                    </div>
+                  </div>
                 ))}
-              </Row>
-            </Card.Body>
-          </Card>
-        </Row>
+              </div>
+            </div>
+          </div>
+        </div>
       )}
-
-    </Container>
+    </div>
   );
 };
 
