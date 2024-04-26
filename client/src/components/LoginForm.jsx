@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 import { useState } from "react";
 import DefaultLayout from "../layouts/DefaultLayout";
 
@@ -5,6 +6,8 @@ const LoginForm = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const clientId = "e269b673d31546e6a6b44f63f4aeadc0";
+  const clientSecret = "1f1ca0920b104536bb29efd3d84c784a";
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -21,16 +24,33 @@ const LoginForm = () => {
       const data = await response.json();
 
       if (data.success) {
-        // Redirect to the home page
         const user = {
           id: data.user.id,
           token: data.user.token,
         };
 
+        var authOptions = {
+          url: 'https://accounts.spotify.com/api/token',
+          headers: {
+            'Authorization': 'Basic ' + (new Buffer.from(clientId + ':' + clientSecret).toString('base64'))
+          },
+          form: {
+            grant_type: 'client_credentials'
+          },
+          json: true
+        };
+        
+        const token = await fetch(authOptions.url, {
+          method: 'POST',
+          headers: authOptions.headers,
+          body: authOptions.form
+        });
+        const tokenData = await token.json();
+        console.log(tokenData.access_token);
+
         // Guardar los datos del usuario en la sesión
         sessionStorage.setItem("user", JSON.stringify(user));
         
-
         // Redirigir a la página de inicio
         location.href = "/";
       } else {

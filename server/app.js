@@ -1,11 +1,19 @@
-require("dotenv").config();
-const express = require("express");
-const cors = require("cors");
-const rateLimit = require("express-rate-limit"); // Middleware de limitación de velocidad
-const cookieParser = require("cookie-parser");
-const connection = require("./src/config/db");
-const verifyToken = require("./src/middleware/verifyToken");
-const createTestUsers = require("./src/utils/createTestUsers");
+import "dotenv/config";
+import express from "express";
+import rateLimit from "express-rate-limit"; // Middleware de limitación de velocidad
+import cookieParser from "cookie-parser";
+import { fileURLToPath } from "url";
+import { dirname } from "path";
+import { createRequire } from "module";
+const require = createRequire(import.meta.url);
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+import "./src/config/db.js";
+import cors from "cors";
+import Playlist from "./src/models/Playlist.js";
+import User from "./src/models/User.js";
+import createTestUsers from "./src/utils/createTestUsers.js";
+import verifyToken from "./src/middleware/verifyToken.js";
 
 const app = express();
 
@@ -37,57 +45,30 @@ app.use((req, res, next) => {
   next();
 });
 
-// Importa los modelos
-const User = require("./src/models/User");
-const Playlist = require("./src/models/Playlist");
-
-// Route for root endpoint of the API
-app.get("/", (req, res) => {
-  res.sendFile(__dirname + "/public/welcome.html");
-});
-
-app.get("/login", (req, res) => {
-  res.sendFile(__dirname + "/public/login.html");
-});
-
-app.get("/register", (req, res) => {
-  res.sendFile(__dirname + "/public/register.html");
-});
-
-app.get("/home", verifyToken ,(req, res) => {
-  res.sendFile(__dirname + "/public/home.html");
-})
-
-app.get("/reset-password", verifyToken ,(req, res) => {
-  res.sendFile(__dirname + "/public/reset-password.html");
-})
-
-// Conecta a la base de datos y sincroniza los modelos
-connection
-  .authenticate()
-  .then(() => {
-    console.log("Conectado a la base de datos");
-    return connection.sync({ force: true });
-  })
-  .then(() => {
-    console.log("Los modelos han sido sincronizados");
+(async () => {
+  try {
+    await import("./src/config/db.js").then((mod) => mod.default());
+    await import("./src/models/User.js").then((mod) => mod.default());
+    await import("./src/models/Playlist.js").then((mod) => mod.default());
+    await import("./src/utils/createTestUsers.js").then((mod) => mod.default());
 
     // Inicializa las asociaciones
     User.associate({ Playlist });
     Playlist.associate({ User });
 
     // Crea los usuarios de prueba
-    return createTestUsers();
-  })
-  .catch((err) => {
+    await createTestUsers();
+
+    // Routes for authentication and user management
+    app.use("/api/v1/users", verifyToken, await import("./src/routes/users.route.js"));
+    app.use("/api/v1/playlists", verifyToken, await import("./src/routes/playlist.route.js"));
+    app.use("/auth", await import("./src/routes/auth.route.js"));
+
+    app.listen(process.env.APP_PORT, () => {
+      console.log(`Server is running on port ${process.env.APP_PORT}.`);
+    });
+  } catch (err) {
     console.error("Error al conectar a la base de datos:", err);
-  });
+  }
+})();
 
-// Routes for authentication and user management
-app.use("/api/users", verifyToken ,require("./src/routes/users.route"));
-app.use("/api/playlists", verifyToken ,require("./src/routes/playlist.route"));
-app.use("/auth", require("./src/routes/auth.route"));
-
-app.listen(process.env.APP_PORT, () => {
-  console.log(`Server is running on port ${process.env.APP_PORT}.`);
-});

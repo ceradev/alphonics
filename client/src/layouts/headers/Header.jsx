@@ -19,6 +19,12 @@ const Header = () => {
     setIsOpenMenu(!isOpenMenu);
   };
 
+  const handleLogout = () => {
+    sessionStorage.removeItem("user");
+    setIsAuth(false);
+    window.location.reload();
+  };
+
   useEffect(() => {
     if (sessionStorage.getItem("user")) {
       setIsAuth(true);
@@ -148,15 +154,15 @@ const Header = () => {
                     >
                       Settings
                     </a>
-                    <a
-                      href="/logout"
+                    <button
+                      onClick={handleLogout}
                       className="block px-4 py-2 text-sm text-gray-700 transition-colors duration-300 hover:text-red-500"
                       role="menuitem"
                       tabIndex="-1"
                       id="user-menu-item-2"
                     >
                       Sign out
-                    </a>
+                    </button>
                   </div>
                 )}
               </div>

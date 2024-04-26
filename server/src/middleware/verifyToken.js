@@ -2,7 +2,7 @@ const jwt = require('jsonwebtoken');
 
 const secretKeyAccessToken = process.env.ACCESS_TOKEN; // Clave secreta para el token de acceso
 
-function verifyToken(req, res, next) {
+export default function verifyToken(req, res, next) {
   const accessToken = req.headers.authorization;
 
   if (!accessToken) {
@@ -18,5 +18,3 @@ function verifyToken(req, res, next) {
     return res.status(401).json({ error: 'Unauthorized: Invalid token' });
   }
 }
-
-module.exports = verifyToken;
