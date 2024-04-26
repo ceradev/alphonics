@@ -1,5 +1,6 @@
-const User = require("../models/User");
 const Playlist = require("../models/Playlist");
+const User = require("../models/User");
+
 class UserController {
   // Método para obtener todos los usuarios
   getAllUsers(req, res) {

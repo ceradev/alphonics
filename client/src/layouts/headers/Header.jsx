@@ -1,9 +1,10 @@
 import { useState } from "react";
 import logo from "../../assets/images/logo.png";
+import logoname from "../../assets/images/logo-text.png";
 import { LuLibrary } from "react-icons/lu";
-import { CgProfile } from "react-icons/cg";
 import { TbMusicSearch } from "react-icons/tb";
 import { FaHome, FaUser } from "react-icons/fa";
+import { RiLoginCircleFill } from "react-icons/ri";
 import { useEffect } from "react";
 
 const Header = () => {
@@ -20,13 +21,14 @@ const Header = () => {
   };
 
   const handleLogout = () => {
-    sessionStorage.removeItem("user");
+    sessionStorage.removeItem("USER_ACCESS_TOKEN");
+    sessionStorage.removeItem("SPOTIFY_ACCESS_TOKEN");
     setIsAuth(false);
     window.location.reload();
   };
 
   useEffect(() => {
-    if (sessionStorage.getItem("user")) {
+    if (sessionStorage.getItem("USER_ACCESS_TOKEN") !== null) {
       setIsAuth(true);
     } else {
       setIsAuth(false);
@@ -78,59 +80,82 @@ const Header = () => {
             </button>
           </div>
           <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
-            <div className="flex flex-shrink-0 items-center mr-4">
-              <img
-                className="h-24 w-auto cursor-pointer hover:transition-transform duration-300 hover:transform hover:scale-110"
-                src={logo}
-                alt="Alphonics Logo"
-                onClick={() => window.location.assign("/")}
-              />
-            </div>
-            <div className="hidden sm:flex space-x-4">
-              <a
-                href="/"
-                className="flex items-center text-gray-300 hover:transition-colors duration-300 hover:text-white rounded-md px-3 py-2 text-sm font-medium"
-                aria-current="page"
-              >
-                <FaHome className="h-4 w-4 mr-1" />
-                Home
-              </a>
-              <a
-                href="/discover"
-                className="flex items-center text-gray-300 hover:transition-colors duration-300 hover:text-white rounded-md px-3 py-2 text-sm font-medium"
-              >
-                <TbMusicSearch className="h-4 w-4 mr-1" />
-                Discover
-              </a>
-              <a
-                href="/library"
-                className="flex items-center text-gray-300 hover:transition-colors duration-300 hover:text-white rounded-md px-3 py-2 text-sm font-medium"
-              >
-                <LuLibrary className="h-4 w-4 mr-1" />
-                Library
-              </a>
-            </div>
+            {/* Logo */}
+            {isAuth ? (
+              <div className="flex flex-shrink-0 items-center mr-4">
+                <img
+                  className="h-28 w-auto cursor-pointer hover:transition-transform duration-300 hover:transform hover:scale-105"
+                  src={logo}
+                  alt="Alphonics Logo"
+                  onClick={() => window.location.assign("/")}
+                />
+              </div>
+            ) : (
+              <div className="flex flex-shrink-0 items-center mr-4">
+                <img
+                  className="h-44 w-auto cursor-pointer hover:transition-transform duration-300 hover:transform hover:scale-105"
+                  src={logoname}
+                  alt="Alphonics Logo with name"
+                  onClick={() => window.location.assign("/")}
+                />
+              </div>
+            )}
+            {/* Menu */}
+            {isAuth ? (
+              <div className="hidden sm:flex space-x-4">
+                <a
+                  href="/"
+                  className="flex items-center text-sm font-medium text-gray-300 hover:text-white transition-colors duration-300 rounded-md px-2 py-1"
+                  aria-current="page"
+                >
+                  <FaHome className="h-6 w-6 mr-2 opacity-75 transition duration-150 ease-in-out group-hover:opacity-100" />
+                  <span className="transition duration-150 ease-in-out group-hover:text-white">
+                    Home
+                  </span>
+                </a>
+                <a
+                  href="/discover"
+                  className="flex items-center text-sm font-medium text-gray-300 hover:text-white transition-colors duration-300 rounded-md px-2 py-1"
+                >
+                  <TbMusicSearch className="h-6 w-6 mr-2 opacity-75 transition duration-150 ease-in-out group-hover:opacity-100" />
+                  <span className="transition duration-150 ease-in-out group-hover:text-white">
+                    Discover
+                  </span>
+                </a>
+                <a
+                  href="/library"
+                  className="flex items-center text-sm font-medium text-gray-300 hover:text-white transition-colors duration-300 rounded-md px-2 py-1"
+                >
+                  <LuLibrary className="h-6 w-6 mr-2 opacity-75 transition duration-150 ease-in-out group-hover:opacity-100" />
+                  <span className="transition duration-150 ease-in-out group-hover:text-white">
+                    Library
+                  </span>
+                </a>
+              </div>
+            ) : (
+              <></>
+            )}
           </div>
           {isAuth ? (
             <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
               <div className="relative ml-3">
-                <div>
+                <div className="group">
                   <button
                     type="button"
                     onClick={toogleProfile}
-                    className="relative flex rounded-full text-sm hover:transition-all duration-300 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-red-500"
+                    className="relative flex items-center rounded-full focus:outline-none focus:ring-2 focus:ring-inset focus:ring-red-500"
                     id="user-menu-button"
                     aria-expanded={isOpenProfile ? "true" : "false"}
                     aria-haspopup="true"
                   >
                     <span className="absolute -inset-1.5"></span>
                     <span className="sr-only">Open user menu</span>
-                    <CgProfile className="h-7 w-7 text-gray-300" />
+                    <FaUser className="h-7 w-7 text-gray-300 group-hover:scale-110 transition-transform duration-300  " />
                   </button>
                 </div>
                 {isOpenProfile && (
                   <div
-                    className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-gray-300 py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
+                    className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
                     role="menu"
                     aria-orientation="vertical"
                     aria-labelledby="user-menu-button"
@@ -138,7 +163,7 @@ const Header = () => {
                   >
                     <a
                       href="/profile"
-                      className="block px-4 py-2 text-sm text-gray-700 transition-colors duration-300 hover:text-red-500"
+                      className="block px-4 py-2 text-sm text-gray-700 transition-colors duration-300 hover:bg-gray-20 hover:shadow-md"
                       role="menuitem"
                       tabIndex="-1"
                       id="user-menu-item-0"
@@ -147,7 +172,7 @@ const Header = () => {
                     </a>
                     <a
                       href="/settings"
-                      className="block px-4 py-2 text-sm text-gray-700 transition-colors duration-300 hover:text-red-500"
+                      className="block px-4 py-2 text-sm text-gray-700 transition-colors duration-300 hover:bg-gray-200 hover:shadow-md"
                       role="menuitem"
                       tabIndex="-1"
                       id="user-menu-item-1"
@@ -156,7 +181,7 @@ const Header = () => {
                     </a>
                     <button
                       onClick={handleLogout}
-                      className="block px-4 py-2 text-sm text-gray-700 transition-colors duration-300 hover:text-red-500"
+                      className="block px-4 py-2 text-sm text-gray-700 transition-colors duration-300 hover:bg-gray-200 hover:shadow-md hover:text-red-500"
                       role="menuitem"
                       tabIndex="-1"
                       id="user-menu-item-2"
@@ -168,52 +193,22 @@ const Header = () => {
               </div>
             </div>
           ) : (
-            <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
-            <div className="relative ml-3">
-              <div>
-                <button
-                  type="button"
-                  onClick={toogleProfile}
-                  className="relative flex rounded-full text-smcursor-pointer hover:transition-transform duration-300 hover:transform hover:scale-110"
-                  id="user-menu-button"
-                  aria-expanded={isOpenProfile ? "true" : "false"}
-                  aria-haspopup="true"
-                >
-                  <span className="absolute -inset-1.5"></span>
-                  <span className="sr-only">Open user menu</span>
-                  <FaUser className="h-7 w-7 text-gray-300" />
-                </button>
-              </div>
-              {isOpenProfile && (
-                <div
-                  className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-gray-300 py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
-                  role="menu"
-                  aria-orientation="vertical"
-                  aria-labelledby="user-menu-button"
-                  tabIndex="-1"
-                >
-                  <a
-                    href="/signup"
-                    className="block px-4 py-2 text-sm text-gray-700 transition-colors duration-300 hover:text-red-500"
-                    role="menuitem"
-                    tabIndex="-1"
-                    id="user-menu-item-0"
-                  >
-                    Sign Up
-                  </a>
-                  <a
-                    href="/login"
-                    className="block px-4 py-2 text-sm text-gray-700 transition-colors duration-300 hover:text-red-500"
-                    role="menuitem"
-                    tabIndex="-1"
-                    id="user-menu-item-1"
-                  >
-                    Log In
-                  </a>
-                </div>
-              )}
+            <div className="sm:flex hidden items-center gap-4">
+              <button
+                type="button"
+                className="bg-white text-red-500 font-medium px-4 py-2 hover:bg-gray-200 hover:text-red-600 hover:ring-red-600 rounded-md shadow-md transition-all duration-300 focus:outline-none"
+                onClick={() => window.location.assign("/login")}
+              >
+                Log In
+              </button>
+              <button
+                type="button"
+                className="bg-red-500 text-white font-medium px-4 py-2 hover:bg-red-400 hover:text-white hover:ring-red-600 rounded-md shadow-md transition-all duration-300 focus:outline-none"
+                onClick={() => window.location.assign("/signup")}
+              >
+                Sign Up
+              </button>
             </div>
-          </div>
           )}
         </div>
       </div>
@@ -221,30 +216,47 @@ const Header = () => {
         className={`sm:hidden ${isOpenMenu ? "" : "hidden"}`}
         id="mobile-menu"
       >
-        <div className="space-y-1 px-2 pb-3 pt-2">
-          <a
-            href="/"
-            className="flex items-center text-gray-300 hover:transition-colors duration-300 hover:text-white block rounded-md px-3 py-2 text-base font-medium"
-            aria-current="page"
-          >
-            <FaHome className="h-4 w-4 mr-1" />
-            Home
-          </a>
-          <a
-            href="/discover"
-            className="flex items-center text-gray-300 hover:transition-colors duration-300 hover:text-white block rounded-md px-3 py-2 text-base font-medium"
-          >
-            <TbMusicSearch className="h-4 w-4 mr-1" />
-            Discover
-          </a>
-          <a
-            href="/library"
-            className="flex items-center text-gray-300 hover:transition-colors duration-300 hover:text-white block rounded-md px-3 py-2 text-base font-medium"
-          >
-            <LuLibrary className="h-4 w-4 mr-1" />
-            Library
-          </a>
-        </div>
+        {isAuth ? (
+          <div className="space-y-1 px-2 pb-3 pt-2">
+            <a
+              href="/"
+              className="flex items-center text-gray-300 hover:transition-colors duration-300 hover:text-white rounded-md px-3 py-2 text-base font-medium"
+              aria-current="page"
+            >
+              <FaHome className="h-4 w-4 mr-1" />
+              Home
+            </a>
+            <a
+              href="/discover"
+              className="flex items-center text-gray-300 hover:transition-colors duration-300 hover:text-white rounded-md px-3 py-2 text-base font-medium"
+            >
+              <TbMusicSearch className="h-4 w-4 mr-1" />
+              Discover
+            </a>
+            <a
+              href="/library"
+              className="flex items-center text-gray-300 hover:transition-colors duration-300 hover:text-white rounded-md px-3 py-2 text-base font-medium"
+            >
+              <LuLibrary className="h-4 w-4 mr-1" />
+              Library
+            </a>
+          </div>
+        ) : (
+          <div className="space-y-1 px-2 pb-3 pt-2">
+            <a
+              href="/login"
+              className="flex items-center text-gray-300 hover:transition-colors duration-300 hover:text-white rounded-md px-3 py-2 text-base font-medium"
+            >
+              Log In
+            </a>
+            <a
+              href="/signup"
+              className="flex items-center text-gray-300 hover:transition-colors duration-300 hover:text-white rounded-md px-3 py-2 text-base font-medium"
+            >
+              Sign Up
+            </a>
+          </div>
+        )}
       </div>
     </nav>
   );

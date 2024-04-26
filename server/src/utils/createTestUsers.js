@@ -1,7 +1,7 @@
-const User = require("../models/User"); // Asegúrate de que la ruta sea correcta
+const User = require("../models/User");
 const Playlist = require("../models/Playlist");
 
-export default async function createTestUsers() {
+async function createTestUsers() {
   try {
     // Elimina todas las playlists existentes
     await Playlist.destroy({ where: {} });
@@ -61,3 +61,5 @@ export default async function createTestUsers() {
     console.error("Error al crear usuarios de prueba y playlists:", error);
   }
 }
+
+module.exports = createTestUsers;

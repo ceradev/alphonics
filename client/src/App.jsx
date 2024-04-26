@@ -6,11 +6,6 @@ import LoginForm from "./components/LoginForm";
 import SignupForm from "./components/SignupForm";
 import Profile from './components/Profile';
 import Settings from './components/Settings';
-import Subscription from "./components/Subscription";
-import InsideAlbum from "./components/InsideAlbum";
-import AboutUs from "./components/AboutUs.jsx";
-import Contact from "./components/Contact.jsx";
-import InsidePlaylists from "./components/InsidePlaylists";
 
 const App = () => {
   return (
@@ -22,12 +17,7 @@ const App = () => {
           <Route path="/login" element={<LoginForm />} />
           <Route path="/signup" element={<SignupForm />} />
           <Route path='/profile' element={<Profile />} />
-          <Route path="/settings" element={<Settings />} />
-          <Route path="/subscription" element={<Subscription />} />
-          <Route path="/album/:id" element={<InsideAlbum />} />
-          <Route path="/about-us" element={<AboutUs />} />
-          <Route path="/contact" element={<Contact />} />
-          <Route path="/inside-playlists/:id" element={<InsidePlaylists />} />
+          <Route path="/settings" element={<Settings />} /> 
         </Routes>
     </Router>
   );

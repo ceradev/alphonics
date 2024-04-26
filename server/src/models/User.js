@@ -1,7 +1,9 @@
-const { Model, DataTypes } = require('sequelize');
-const bcrypt = require('bcrypt');
-const sequelize = require('../config/db').default;
-export default class User extends Model {
+const { Model, DataTypes } = require("sequelize");
+const bcrypt = require("bcrypt");
+const sequelize = require("../config/db");
+const Playlist = require("./Playlist");
+
+class User extends Model {
   static associate(models) {
     User.hasMany(models.Playlist, {
       foreignKey: 'user_id',
@@ -45,6 +47,7 @@ User.init(
     username: {
       type: DataTypes.STRING,
       allowNull: false,
+      unique: true,
       validate: {
         notEmpty: true,
         len: [3, 30], // Longitud mínima y máxima para el nombre de usuario
@@ -53,6 +56,7 @@ User.init(
     email: {
       type: DataTypes.STRING,
       allowNull: false,
+      unique: true,
       validate: {
         notEmpty: true,
         isEmail: true, // Verificación del formato de correo electrónico

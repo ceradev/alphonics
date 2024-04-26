@@ -1,4 +1,4 @@
-import Sequelize from "sequelize";
+const Sequelize = require("sequelize");
 
 // Configuración de la base de datos
 const dbConfig = {
@@ -21,4 +21,5 @@ const sequelize = new Sequelize(
   }
 );
 
-export default sequelize;
+// Exporta la instancia de Sequelize
+module.exports = sequelize;
