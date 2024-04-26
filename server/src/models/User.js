@@ -47,6 +47,7 @@ User.init(
     username: {
       type: DataTypes.STRING,
       allowNull: false,
+      unique: true,
       validate: {
         notEmpty: true,
         len: [3, 30], // Longitud mínima y máxima para el nombre de usuario
@@ -55,6 +56,7 @@ User.init(
     email: {
       type: DataTypes.STRING,
       allowNull: false,
+      unique: true,
       validate: {
         notEmpty: true,
         isEmail: true, // Verificación del formato de correo electrónico
