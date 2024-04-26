@@ -1,18 +1,44 @@
-import React from "react";
+import React, { useState } from 'react';
+import { Container, Form, Button } from 'react-bootstrap';
 
 const Contact = () => {
-    return (
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex flex-col items-center justify-center h-screen">
-                <h1 className="text-5xl font-bold text-center tracking-tight animate-pulse animate-fade-in-down text-red-500">
-                    Contact
-                </h1>
-                <p className="mt-4 max-w-2xl text-xl animate-fade-in-up text-center">
-                    If you have any questions, please feel free to contact us.
-                </p>
-            </div>
-        </div>
-    );
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    message: ''
+  });
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log(formData); // Enviar datos del formulario a través de una API o realizar alguna acción adicional
+  };
+
+  return (
+    <Container className="contact-container">
+      <h1>Contact Us</h1>
+      <Form onSubmit={handleSubmit}>
+        <Form.Group controlId="formName">
+          <Form.Label>Name</Form.Label>
+          <Form.Control type="text" name="name" value={formData.name} onChange={handleChange} required />
+        </Form.Group>
+        <Form.Group controlId="formEmail">
+          <Form.Label>Email</Form.Label>
+          <Form.Control type="email" name="email" value={formData.email} onChange={handleChange} required />
+        </Form.Group>
+        <Form.Group controlId="formMessage">
+          <Form.Label>Message</Form.Label>
+          <Form.Control as="textarea" rows={4} name="message" value={formData.message} onChange={handleChange} required />
+        </Form.Group>
+        <Button variant="primary" type="submit">
+          Submit
+        </Button>
+      </Form>
+    </Container>
+  );
 };
 
 export default Contact;

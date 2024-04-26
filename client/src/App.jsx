@@ -6,11 +6,6 @@ import LoginForm from "./components/LoginForm";
 import SignupForm from "./components/SignupForm";
 import Profile from './components/Profile';
 import Settings from './components/Settings';
-import Subscriptions from './components/Subscriptions';
-import About from './components/About';
-import Contact from './components/Contact';
-import Terms from './components/Terms';
-import Privacy from './components/Privacy';
 
 const App = () => {
   return (
@@ -23,12 +18,6 @@ const App = () => {
           <Route path="/signup" element={<SignupForm />} />
           <Route path='/profile' element={<Profile />} />
           <Route path="/settings" element={<Settings />} /> 
-          <Route path="*" element={<Home />} />
-          <Route path="/subscriptions" element={<Subscriptions />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/contact" element={<Contact />} />
-          <Route path="/terms" element={<Terms />} />
-          <Route path="/privacy" element={<Privacy />} />
         </Routes>
     </Router>
   );
