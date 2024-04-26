@@ -7,12 +7,14 @@ const SignupForm = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [error, setError] = useState(null);
+  const CLIENT_ID = "e269b673d31546e6a6b44f63f4aeadc0";
+  const CLIENT_SECRET = "1f1ca0920b104536bb29efd3d84c784a";
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
-      const response = await fetch("http://localhost:3000/auth/signup", {
+      const responseAPI = await fetch("http://localhost:3000/auth/signup", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -20,20 +22,41 @@ const SignupForm = () => {
         body: JSON.stringify({ username, password, name, email }),
       });
 
-      const data = await response.json();
+      const dataUser = await responseAPI.json();
 
-      if (data.success) {
-        // Redirect to the home page
-        const user = {
-          id: data.user.id,
-          token: data.user.token,
-        };
+      if (dataUser.success) {
+        // Establecer el token de acceso en una variable de sesión
+        sessionStorage.setItem("USER_ACCESS_TOKEN", dataUser.user.token);
 
-        // Guardar los datos del usuario en la sesión
-        sessionStorage.setItem("user", JSON.stringify(user));
-        location.href = "/";
+        // Obtener el token de acceso a la API de Spotify
+        const responseSpotify = await fetch(
+          "https://accounts.spotify.com/api/token",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/x-www-form-urlencoded",
+            },
+            body: `grant_type=client_credentials&client_id=${CLIENT_ID}&client_secret=${CLIENT_SECRET}`,
+          }
+        );
+        if (!responseSpotify.ok) {
+          throw new Error("Failed to fetch access token from Spotify API");
+        }
+
+        const dataSpotify = await responseSpotify.json();
+        sessionStorage.setItem(
+          "SPOTIFY_ACCESS_TOKEN",
+          dataSpotify.access_token
+        );
+
+        console.log(
+          "Login successful with Spotify access token and Alphonics access token"
+        );
+
+        // Redirigir a la página principal
+        window.location.href = "/";
       } else {
-        setError(data.error);
+        setError(dataUser.error);
       }
     } catch (error) {
       console.error(error);

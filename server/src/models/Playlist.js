@@ -75,3 +75,5 @@ Playlist.init(
     timestamps: false,
   }
 );
+
+module.exports = Playlist;

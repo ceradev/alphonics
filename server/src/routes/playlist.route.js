@@ -1,7 +1,6 @@
 const express = require('express');
-const PlaylistController = require('../controllers/playlistController');
+const PlaylistController = require('../controllers/playlistController.js');
 const playlistController = new PlaylistController();
-
 const router = express.Router();
 
 // Ruta para obtener todas las playlists
@@ -14,3 +13,4 @@ router.post('/:id/songs', playlistController.addSongToPlaylist);
 router.delete('/:id/canciones/:songId', playlistController.deleteSongFromPlaylist);
 
 module.exports = router;
+

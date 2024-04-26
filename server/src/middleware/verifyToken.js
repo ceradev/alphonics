@@ -1,6 +1,5 @@
-const jwt = require('jsonwebtoken');
-
 const secretKeyAccessToken = process.env.ACCESS_TOKEN; // Clave secreta para el token de acceso
+const jwt = require('jsonwebtoken');
 
 export default function verifyToken(req, res, next) {
   const accessToken = req.headers.authorization;

@@ -21,4 +21,5 @@ const sequelize = new Sequelize(
   }
 );
 
-export default sequelize;
+// Exporta la instancia de Sequelize
+module.exports = sequelize;
