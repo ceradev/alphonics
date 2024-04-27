@@ -11,6 +11,8 @@ import About from './components/About';
 import Contact from './components/Contact';
 import Terms from './components/Terms';
 import Privacy from './components/Privacy';
+import InsideAlbum from './components/InsideAlbum';
+import InsidePlaylists from './components/InsidePlaylists';
 
 const App = () => {
   return (
@@ -23,6 +25,8 @@ const App = () => {
           <Route path="/signup" element={<SignupForm />} />
           <Route path='/profile' element={<Profile />} />
           <Route path="/settings" element={<Settings />} /> 
+          <Route path="/album/:id" element={<InsideAlbum />} />
+          <Route path="/inside-playlists/:id" element={<InsidePlaylists />} />
           <Route path="*" element={<Home />} />
           <Route path="/subscriptions" element={<Subscriptions />} />
           <Route path="/about" element={<About />} />
