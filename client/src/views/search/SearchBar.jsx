@@ -1,9 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { FaSearch } from 'react-icons/fa'; // Importamos el icono de búsqueda de React Icons
 import { Link, useLocation } from 'react-router-dom';
-
-const CLIENT_ID = "e269b673d31546e6a6b44f63f4aeadc0";
-const CLIENT_SECRET = "1f1ca0920b104536bb29efd3d84c784a";
 
 const SearchBar = ({ onSearch, onGenresVisibilityChange }) => {
   const [searchInput, setSearchInput] = useState('');

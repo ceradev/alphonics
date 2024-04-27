@@ -1,13 +1,9 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-
-const CLIENT_ID = "e269b673d31546e6a6b44f63f4aeadc0";
-const CLIENT_SECRET = "1f1ca0920b104536bb29efd3d84c784a";
 
 function InsideAlbum() {
   const { id } = useParams();
   const [album, setAlbum] = useState(null);
-  const [isLoading, setIsLoading] = useState(false);
   const [accessToken, setAccessToken] = useState(null);
   const navigate = useNavigate();
 
@@ -22,7 +18,6 @@ function InsideAlbum() {
 
   useEffect(() => {
     const fetchAlbum = async () => {
-      setIsLoading(true);
       const response = await fetch(
         `https://api.spotify.com/v1/albums/${id}`,
         {
@@ -33,7 +28,6 @@ function InsideAlbum() {
       );
       const data = await response.json();
       setAlbum(data);
-      setIsLoading(false);
     };
     if (accessToken) {
       fetchAlbum();

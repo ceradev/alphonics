@@ -1,5 +1,4 @@
-import React from 'react';
-import Layout from '../layouts/Layout';
+import Layout from '../../components/layouts/Layout';
 import { FaUser } from 'react-icons/fa';
 
 const Library = () => {

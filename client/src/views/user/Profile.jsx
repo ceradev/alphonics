@@ -1,4 +1,4 @@
-import Layout from "../layouts/Layout";
+import Layout from "../../components/layouts/Layout";
 import { useState, useEffect } from "react";
 import { FaUser } from "react-icons/fa";
 

@@ -1,7 +1,5 @@
-import React from "react";
 import { FaCheck } from "react-icons/fa";
-import Layout from "../layouts/Layout";
-import DefaultLayout from "../layouts/DefaultLayout";
+import DefaultLayout from "../../components/layouts/DefaultLayout";
 const Subscriptions = () => {
   return (
     <DefaultLayout>

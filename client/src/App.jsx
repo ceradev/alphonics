@@ -1,18 +1,18 @@
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import Home from "./components/Home";
-import Discover from "./components/Discover";
-import Library from "./components/Library";
-import LoginForm from "./components/LoginForm";
-import SignupForm from "./components/SignupForm";
-import Profile from './components/Profile';
-import Settings from './components/Settings';
-import Subscriptions from './components/Subscriptions';
-import About from './components/About';
-import Contact from './components/Contact';
-import Terms from './components/Terms';
-import Privacy from './components/Privacy';
-import InsideAlbum from './components/InsideAlbum';
-import InsidePlaylists from './components/InsidePlaylists';
+import Home from './views/home/Home';
+import Discover from './views/discover/Discover';
+import Library from './views/library/Library';
+import LoginForm from './views/auth/LoginForm';
+import SignupForm from './views/auth/SignupForm';
+import Profile from './views/user/Profile';
+import Settings from './views/user/Settings';
+import InsideAlbum from './views/library/InsideAlbum';
+import InsidePlaylists from './views/library/InsidePlaylists';
+import Subscriptions from './views/user/Subscriptions';
+import About from './views/pages/About';
+import Contact from './views/pages/Contact';
+import Terms from './views/pages/Terms';
+import Privacy from './views/pages/Privacy';
 
 const App = () => {
   return (

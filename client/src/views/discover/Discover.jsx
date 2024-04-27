@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from 'react';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
+import axios from 'axios';
 import SearchBar from '../search/SearchBar';
 import GenresList from './GenresList';
 import TracksList from '../library/TracksList';
-import Layout from '../layouts/Layout';
+import Layout from '../../components/layouts/Layout';
 
 const Discover = () => {
   const [searchResult, setSearchResult] = useState(null);

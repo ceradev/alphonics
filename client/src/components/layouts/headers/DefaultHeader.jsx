@@ -1,4 +1,4 @@
-import logo from "../../assets/images/logo-text.png";
+import logo from "../../../assets/images/logo-text.png";
 
 
 const DefaultHeader = () => {

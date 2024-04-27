@@ -1,10 +1,9 @@
 import { useState } from "react";
-import logo from "../../assets/images/logo.png";
-import logoname from "../../assets/images/logo-text.png";
+import logo from "../../../assets/images/logo.png";
+import logoname from "../../../assets/images/logo-text.png";
 import { LuLibrary } from "react-icons/lu";
 import { TbMusicSearch } from "react-icons/tb";
 import { FaHome, FaUser } from "react-icons/fa";
-import { RiLoginCircleFill } from "react-icons/ri";
 import { useEffect } from "react";
 
 const Header = () => {

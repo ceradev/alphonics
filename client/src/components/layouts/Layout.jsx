@@ -12,7 +12,7 @@ const Layout = ({ children }) => {
     } else {
       setIsAuth(false);
     }
-  });
+  }, []);
 
   return (
     <div className="flex flex-col min-h-screen">

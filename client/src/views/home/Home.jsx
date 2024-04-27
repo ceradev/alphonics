@@ -1,5 +1,4 @@
-import React from "react";
-import Layout from "../layouts/Layout";
+import Layout from "../../components/layouts/Layout";
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 
@@ -7,7 +6,6 @@ const Home = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [accessToken, setAccessToken] = useState(null);
   const [featuredPlaylists, setFeaturedPlaylists] = useState([]);
-  const [userPlaylists, setUserPlaylists] = useState([]);
   const [newReleases, setNewReleases] = useState([]);
   const [selectedPlaylist, setSelectedPlaylist] = useState(null); // Nuevo estado para almacenar la playlist seleccionada
   const location = useLocation(); // Utilizamos useLocation para obtener la ubicación actual
