@@ -11,15 +11,19 @@ async function createTestUsers() {
 
     // Crea algunos usuarios de prueba
     await User.create({
-      name: "César Suárez",
+      name: "César Aramis",
+      surname: "Suarez Orizondo",
       username: "ceradev",
+      profilePic: "https://example.com/image.jpg",
       email: "lI3pN@gmail.com",
       password: "cesar123456",
     });
 
     await User.create({
-      name: "Minghai Chen",
+      name: "Minghai",
+      surname: "Chen",
       username: "chen3373",
+      profilePic: "https://example.com/image.jpg",
       email: "hQqkSs@gmail.com",
       password: "minghai123456",
     });

@@ -6,14 +6,12 @@ import { Link } from "react-router-dom";
 const Album = () => {
   const { id } = useParams();
   const [album, setAlbum] = useState(null);
-  const [accessToken, setAccessToken] = useState(null);
+  const accessToken = sessionStorage.getItem("SPOTIFY_ACCESS_TOKEN");
   const navigate = useNavigate();
 
   useEffect(() => {
     if (sessionStorage.getItem("USER_ACCESS_TOKEN") === null) {
       navigate("/login");
-    } else {
-      setAccessToken(sessionStorage.getItem("SPOTIFY_ACCESS_TOKEN"));
     }
   }, [navigate]);
 
@@ -27,9 +25,8 @@ const Album = () => {
       const data = await response.json();
       setAlbum(data);
     };
-    if (accessToken) {
       fetchAlbum();
-    }
+    
   }, [accessToken, id]);
 
   function msToMinutesAndSeconds(ms) {

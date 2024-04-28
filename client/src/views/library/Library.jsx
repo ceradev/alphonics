@@ -1,7 +1,63 @@
 import Layout from "../../components/layouts/Layout";
 import { FaUser } from "react-icons/fa";
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { jwtDecode } from "jwt-decode";
 
 const Library = () => {
+  const [searchQuery, setSearchQuery] = useState("");
+  const [UserPlaylists, setUserPlaylists] = useState([]);
+  const [UserData, setUserData] = useState(null);
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      const token = sessionStorage.getItem("USER_ACCESS_TOKEN");
+      if (token) {
+        const decoded = jwtDecode(token);
+        const id = decoded.id;
+
+        const response = await fetch(`http://localhost:3000/api/v1/users/${id}`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": token,
+          },
+        });
+        const data = await response.json();
+        setUserData(data.user);
+      }
+    };
+    fetchUserData();
+  }, []);
+
+  useEffect(() => {
+    const fetchUserPlaylists = async () => {
+      const token = sessionStorage.getItem("USER_ACCESS_TOKEN");
+      if (token) {
+        const decoded = jwtDecode(token);
+        const id = decoded.id;
+        const response = await fetch(`http://localhost:3000/api/v1/users/${id}/playlists`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": token,
+          },
+        });
+        const data = await response.json();
+        setUserPlaylists(data.playlists);
+      }
+    };
+    fetchUserPlaylists();
+  }, []);
+  const handleSearch = (event) => {
+    setSearchQuery(event.target.value);
+  };
+
+  const handleSearchSubmit = (event) => {
+    event.preventDefault();
+    // Lógica para realizar la búsqueda
+  };
+
   return (
     <Layout>
       <div className="container mx-auto px-4">

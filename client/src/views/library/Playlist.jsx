@@ -8,7 +8,7 @@ const Playlist = () => {
   const [playlist, setPlaylist] = useState(null);
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
-  const [accessToken, setAccessToken] = useState("");
+  const accessToken = sessionStorage.getItem("SPOTIFY_ACCESS_TOKEN");
 
   useEffect(() => {
     const fetchPlaylistInfo = async (playlistId) => {
@@ -37,8 +37,7 @@ const Playlist = () => {
     if (sessionStorage.getItem("USER_ACCESS_TOKEN") === null) {
       navigate("/login");
     } else {
-      setAccessToken(sessionStorage.getItem("SPOTIFY_ACCESS_TOKEN"));
-
+      setIsLoading(true);
       if (id) {
         fetchPlaylistInfo(id);
       }
@@ -97,7 +96,14 @@ const Playlist = () => {
                   <div className="absolute inset-0 bg-gray-900 bg-opacity-0 group-hover:bg-opacity-40 transition-colors duration-200 ease-in-out" />
                   <div className="absolute inset-0 flex flex-col justify-end p-4">
                     <h3 className="text-sm font-semibold text-white">{track.track.name}</h3>
-                    <p className="text-xs text-gray-400">{track.track.artists[0].name}</p>
+                    <div className="flex flex-col mt-2">
+                      {track.track.artists.map((artist, index) => (
+                        <Link to={`/artist/${artist.id}`} key={index} className="text-xs text-gray-400 hover:text-red-500 transition-colors duration-300">
+                          {index !== 0 ? ", " : ""}
+                          {artist.name}
+                        </Link>
+                      ))}
+                    </div>
                     <p className="text-xs text-gray-400">{msToMinutesAndSeconds(track.track.duration_ms)}</p>
                   </div>
                 </Link>

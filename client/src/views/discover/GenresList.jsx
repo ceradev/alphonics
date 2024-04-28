@@ -11,14 +11,12 @@ const GenresList = ({ setView, setSelectedGenre }) => {
 
   const [genres, setGenres] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [accessToken, setAccessToken] = useState("");
   const navigate = useNavigate();
+  const accessToken = sessionStorage.getItem("SPOTIFY_ACCESS_TOKEN");
 
   useEffect(() => {
     if (sessionStorage.getItem("USER_ACCESS_TOKEN") === null) {
       navigate("/login");
-    } else {
-      setAccessToken(sessionStorage.getItem("SPOTIFY_ACCESS_TOKEN"));
     }
   }, [navigate]);
 
@@ -33,6 +31,7 @@ const GenresList = ({ setView, setSelectedGenre }) => {
         let totalGenres = limit; // Just to start the loop
 
         while (offset < totalGenres) {
+          const accessToken = sessionStorage.getItem("SPOTIFY_ACCESS_TOKEN");
           const response = await fetch(
             `https://api.spotify.com/v1/browse/categories?offset=${offset}&limit=${limit}`,
             {
@@ -63,7 +62,7 @@ const GenresList = ({ setView, setSelectedGenre }) => {
 
   const handleGenreSelect = (genre) => {
     setSelectedGenre(genre); // Pasar el objeto de género
-    setView("tracks");
+    setView("playlists");
   };
 
   return (

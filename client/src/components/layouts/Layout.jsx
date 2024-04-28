@@ -27,7 +27,11 @@ const Layout = ({ children }) => {
         <footer className="bg-gradient-to-b from-gray-300 via-red-500 to-red-700 py-3">
           <DefaultFooter />
         </footer>
-      ) : null}
+      ) : (
+        <footer className="bg-gradient-to-b from-gray-300 via-red-500 to-red-700 py-3">
+          <DefaultFooter />
+        </footer>
+      )}
     </div>
   );
 };

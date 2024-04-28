@@ -30,25 +30,21 @@ class UserController {
     const userId = req.params.id;
 
     // Lógica para obtener las playlists de un usuario por su ID
-    User.findByPk(userId, {
-      include: [
-        {
-          model: Playlist,
-          as: "playlists",
-        },
-      ],
-    })
-      .then((user) => {
+    User.findByPk(userId)
+      .then(async (user) => {
         if (!user || user === null) {
           res.status(404).json({
             success: false,
             message: "User not found",
           });
         } else {
+          // Obtén las playlists asociadas al usuario
+          const playlists = await user.getPlaylists();
+
           res.json({
             success: true,
             message: "User playlists retrieved successfully",
-            playlists: user.playlists,
+            playlists: playlists,
           });
         }
       })
