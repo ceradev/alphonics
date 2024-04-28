@@ -5,8 +5,8 @@ Thumbs.db
 # Ignorar archivos de configuración local
 .env
 
-# Ignorar directorio de dependencias
-/node_modules
+# dependencies
+node_modules/
 
 # Ignorar archivos de registro
 /logs
@@ -17,12 +17,6 @@ Thumbs.db
 
 # build output
 dist/
-
-# generated types
-.astro/
-
-# dependencies
-node_modules/
 
 # logs
 npm-debug.log*
