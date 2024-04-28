@@ -1,19 +1,21 @@
 import Layout from "../../components/layouts/Layout";
 import { useState, useEffect } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import Slider from "react-slick";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 
 const Home = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [accessToken, setAccessToken] = useState(null);
   const [featuredPlaylists, setFeaturedPlaylists] = useState([]);
   const [newReleases, setNewReleases] = useState([]);
-  const [selectedPlaylist, setSelectedPlaylist] = useState(null); // Nuevo estado para almacenar la playlist seleccionada
-  const location = useLocation(); // Utilizamos useLocation para obtener la ubicación actual
+  const [selectedPlaylist, setSelectedPlaylist] = useState(null);
+  const navigate = useNavigate();
+  const accessToken = sessionStorage.getItem("SPOTIFY_ACCESS_TOKEN");
 
   useEffect(() => {
     if (sessionStorage.getItem("USER_ACCESS_TOKEN") !== null) {
       setIsAuthenticated(true);
-      setAccessToken(sessionStorage.getItem("SPOTIFY_ACCESS_TOKEN"));
     } else {
       setIsAuthenticated(false);
     }
@@ -40,10 +42,8 @@ const Home = () => {
       }
     };
 
-    if (accessToken) {
-      fetchFeaturedPlaylists();
-    }
-  }, [accessToken]);
+    fetchFeaturedPlaylists();
+  }, [accessToken, navigate]);
 
   useEffect(() => {
     const fetchNewReleases = async () => {
@@ -66,9 +66,7 @@ const Home = () => {
       }
     };
 
-    if (accessToken) {
-      fetchNewReleases();
-    }
+    fetchNewReleases();
   }, [accessToken]);
 
   // Saludo dependiendo de la hora del día
@@ -83,10 +81,12 @@ const Home = () => {
     }
   };
 
-  // Mensaje de bienvenida personalizado
-  const welcomeMessage = () => {
-    const userName = "Anonymous"; // Reemplazar con el nombre de usuario real
-    return `Hello ${userName}, good ${getGreeting()}. ¿Do you want to listen to some music?`;
+  const settings = {
+    dots: true,
+    infinite: true,
+    speed: 500,
+    slidesToShow: 4,
+    slidesToScroll: 1,
   };
 
   // Función para manejar la selección de una playlist
@@ -100,17 +100,20 @@ const Home = () => {
         {isAuthenticated ? (
           <div className="flex flex-wrap gap-4 p-4 md:p-8">
             <div className="w-full">
-              <h1 className="text-2xl font-bold mb-4 text-center text-red-500 capitalize tracking-tight animate-pulse">{welcomeMessage()}</h1>
-              <h2 className="text-xl font-bold mt-8 mb-4">Featured Playlists</h2>
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-8">
+              <h1 className="text-2xl font-bold mb-4 text-center text-red-500 capitalize tracking-tight animate-pulse">
+                Hello Anonymous, Good {getGreeting()}, what would you like to
+                listen to?
+              </h1>
+              <h2 className="text-xl font-bold mt-8 mb-4">
+                Featured Playlists
+              </h2>
+              <Slider {...settings}>
                 {featuredPlaylists.map((playlist, index) => (
                   <Link
                     key={index}
-                    to={`/playlist/${playlist.id}`} // Ajusta la ruta para que coincida con el formato definido en App.js
-                    className="cursor-pointer"
                     onClick={() => handlePlaylistSelect(playlist)}
                   >
-                    <div className="bg-gradient-to-br from-gray-100 to-gray-200 rounded-lg shadow-md overflow-hidden aspect-w-1 aspect-h-1 md:aspect-none transform transition-all duration-300 scale-100 hover:shadow-xl hover:scale-105">
+                    <div className="bg-gradient-to-br mr-2 ml-2 from-gray-100 to-gray-200 rounded-lg shadow-md overflow-hidden aspect-w-1 aspect-h-1 md:aspect-none transform transition-all duration-300 scale-100 hover:shadow-xl hover:scale-105 hover:text-red-500">
                       <img
                         src={playlist.images[0]?.url}
                         alt={playlist.name}
@@ -122,7 +125,7 @@ const Home = () => {
                         className="p-4 cursor-pointer hover:text-red-500 transform transition-all duration-300 scale-100 hover:scale-105"
                         onClick={() => handlePlaylistSelect(playlist)}
                       >
-                        <h2 className="text-xl font-bold">{playlist.name}</h2>
+                        <Link to={`/playlist/${playlist.id}`} className="text-xl font-bold mb-2 cursor-pointer">{playlist.name}</Link>
                         <p className="text-gray-600 text-sm">
                           Total tracks: {playlist.tracks.total}
                         </p>
@@ -130,30 +133,39 @@ const Home = () => {
                     </div>
                   </Link>
                 ))}
-              </div>
+              </Slider>
             </div>
             <div className="w-full">
-              <h1 className="text-xl font-bold mb-4">New Releases</h1>
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-8">
+              <h2 className="text-xl font-bold mt-8 mb-4">New Releases</h2>
+              <Slider {...settings}>
                 {newReleases.map((album, index) => (
-                  <div
-                    key={index}
-                    className="bg-gradient-to-br from-gray-100 to-gray-200 rounded-lg shadow-md overflow-hidden aspect-w-1 aspect-h-1 md:aspect-none transform transition-all duration-300 scale-100 hover:shadow-xl hover:scale-105"
-                  >
-                    <img
-                      src={album.images[0]?.url}
-                      alt={album.name}
-                      className="h-48 w-full object-cover"
-                    />
-                    <div className="p-4">
-                      <h2 className="text-xl font-bold">{album.name}</h2>
-                      <p className="text-gray-600 text-sm">
-                        {album.artists[0].name}
-                      </p>
+                 <div key={index} className="w-full">
+                    <div className="bg-gradient-to-br mr-2 ml-2 from-gray-100 to-gray-200 rounded-lg shadow-md overflow-hidden aspect-w-1 aspect-h-1 md:aspect-none transform transition-all duration-300 hover:shadow-xl hover:scale-105">
+                      <img
+                        src={album.images[0]?.url}
+                        alt={album.name}
+                        loading="lazy"
+                        className="h-48 w-full object-cover cursor-pointer"
+                      />
+                      <div className="p-4">
+                        <Link to={`/album/${album.id}`} className="text-xl font-bold hover:text-red-500 cursor-pointer transition-colors duration-300">{album.name}</Link>
+                        <ul className="mt-2">
+                          {album.artists.map((artist, index) => (
+                            <li key={index} className="inline-block mr-2 mb-2">
+                              <Link
+                                to={`/artist/${artist.id}`}
+                                className="text-gray-600 text-sm hover:text-red-500 cursor-pointer transition-colors duration-300"
+                              >
+                                {artist.name}
+                              </Link>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
                     </div>
                   </div>
                 ))}
-              </div>
+              </Slider>
             </div>
           </div>
         ) : (

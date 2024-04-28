@@ -14,6 +14,7 @@ import Contact from "./views/pages/Contact";
 import Terms from "./views/pages/Terms";
 import Privacy from "./views/pages/Privacy";
 import Team from "./views/pages/Team";
+import Artist from "./views/library/Artist";
 
 const App = () => {
   return (
@@ -28,6 +29,7 @@ const App = () => {
         <Route path="/settings" element={<Settings />} />
         <Route path="/album/:id" element={<Album />} />
         <Route path="/playlist/:id" element={<Playlist />} />
+        <Route path="/artist/:id" element={<Artist />} />
         <Route path="/subscriptions" element={<Subscriptions />} />
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Contact />} />
