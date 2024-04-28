@@ -17,7 +17,6 @@ import Team from "./views/pages/Team";
 
 const App = () => {
   return (
-    <Router>
       <Routes>
         <Route path="/" exact element={<Home />} />
         <Route path="/discover" element={<Discover />} />
@@ -36,7 +35,6 @@ const App = () => {
         <Route path="/privacy" element={<Privacy />} />
         <Route path="/team" element={<Team />} />
       </Routes>
-    </Router>
   );
 };
 
