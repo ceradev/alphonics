@@ -101,19 +101,20 @@ const Home = () => {
           <div className="flex flex-wrap gap-4 p-4 md:p-8">
             <div className="w-full">
               <h1 className="text-2xl font-bold mb-4 text-center text-red-500 capitalize tracking-tight animate-pulse">{welcomeMessage()}</h1>
-              <h2 className="text-xl font-bold mb-4">Featured Playlists</h2>
+              <h2 className="text-xl font-bold mt-8 mb-4">Featured Playlists</h2>
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-8">
                 {featuredPlaylists.map((playlist, index) => (
                   <Link
                     key={index}
-                    to={`/inside-playlists/${playlist.id}`} // Ajusta la ruta para que coincida con el formato definido en App.js
-                    className="playlist-link"
+                    to={`/playlist/${playlist.id}`} // Ajusta la ruta para que coincida con el formato definido en App.js
+                    className="cursor-pointer"
                     onClick={() => handlePlaylistSelect(playlist)}
                   >
                     <div className="bg-gradient-to-br from-gray-100 to-gray-200 rounded-lg shadow-md overflow-hidden aspect-w-1 aspect-h-1 md:aspect-none transform transition-all duration-300 scale-100 hover:shadow-xl hover:scale-105">
                       <img
                         src={playlist.images[0]?.url}
                         alt={playlist.name}
+                        loading="lazy"
                         className="h-48 w-full object-cover cursor-pointer"
                         onClick={() => handlePlaylistSelect(playlist)}
                       />

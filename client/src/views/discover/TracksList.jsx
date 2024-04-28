@@ -1,73 +1,48 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from 'react-router-dom';
-
-const CLIENT_ID = "e269b673d31546e6a6b44f63f4aeadc0";
-const CLIENT_SECRET = "1f1ca0920b104536bb29efd3d84c784a";
-
+import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom"; //Link from "react-router-dom";
 const TracksList = ({ selectedGenre, setView, setSelectedGenre }) => {
-  const [tracks, setTracks] = useState([]);
+  const [playlists, setPlaylists] = useState([]);
   const [loading, setLoading] = useState(true);
   const [accessToken, setAccessToken] = useState("");
   const navigate = useNavigate();
 
   useEffect(() => {
-    // API Access Token
-    const fetchAccessToken = async () => {
-      try {
-        const response = await fetch("https://accounts.spotify.com/api/token", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/x-www-form-urlencoded",
-          },
-          body: `grant_type=client_credentials&client_id=${CLIENT_ID}&client_secret=${CLIENT_SECRET}`,
-        });
-        if (!response.ok) {
-          throw new Error("Failed to fetch access token");
-        }
-        const data = await response.json();
-        setAccessToken(data.access_token);
-      } catch (error) {
-        console.error("Error fetching access token:", error);
-      }
-    };
-
-    fetchAccessToken();
-  }, []);
+    // Obtener el token de acceso de la sesión actual
+    if (sessionStorage.getItem("USER_ACCESS_TOKEN") === null) {
+      navigate("/login");
+    } else {
+      setAccessToken(sessionStorage.getItem("SPOTIFY_ACCESS_TOKEN"));
+    }
+  }, [navigate]);
 
   useEffect(() => {
-    // Fetch tracks by genre
-    const fetchTracksByGenre = async () => {
+    // Fetch playlists by genre
+    const fetchPlaylistsByGenre = async () => {
       console.log("Selected genre:", selectedGenre); // Logging selectedGenre
       if (!accessToken || !selectedGenre) return;
       try {
-        const response = await fetch(`https://api.spotify.com/v1/browse/categories/${selectedGenre.id}/playlists`, {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        });
+        const response = await fetch(
+          `https://api.spotify.com/v1/browse/categories/${selectedGenre.id}/playlists`,
+          {
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+            },
+          }
+        );
         if (!response.ok) {
-          throw new Error("Failed to fetch tracks");
+          throw new Error("Failed to fetch playlists");
         }
         const data = await response.json();
-        const playlistId = data.playlists.items[0].id;
-        const tracksResponse = await fetch(`https://api.spotify.com/v1/playlists/${playlistId}/tracks`, {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        });
-        if (!tracksResponse.ok) {
-          throw new Error("Failed to fetch tracks");
-        }
-        const tracksData = await tracksResponse.json();
-        setTracks(tracksData.items);
+        setPlaylists(data.playlists.items);
       } catch (error) {
-        console.error("Error fetching tracks:", error);
+        console.error("Error fetching playlists:", error);
       } finally {
         setLoading(false);
       }
     };
 
-    fetchTracksByGenre();
+    fetchPlaylistsByGenre();
   }, [accessToken, selectedGenre]);
 
   const handleBackToGenres = () => {
@@ -75,22 +50,45 @@ const TracksList = ({ selectedGenre, setView, setSelectedGenre }) => {
     setView("genres");
   };
 
+  const msToMinutesAndSeconds = function (ms) {
+    const minutes = Math.floor(ms / 60000);
+    const seconds = ((ms % 60000) / 1000).toFixed(0);
+    return minutes + ":" + (seconds < 10 ? "0" : "") + seconds;
+  };
+
   return (
-    <div style={{ background: 'linear-gradient(to bottom, #FF0000, #FFFFFF)', padding: '1rem' }}>
-      <button onClick={handleBackToGenres} style={{ background: '#0000FF', color: '#FFFFFF', fontWeight: 'bold', padding: '0.5rem 1rem', borderRadius: '0.25rem', marginBottom: '1rem', border: 'none', cursor: 'pointer' }}>Back</button>
-      <h2 style={{ color: '#FFFFFF' }}>{selectedGenre ? `Top tracks for ${selectedGenre.name}` : "Loading..."}</h2>
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))', gap: '1rem' }}>
+    <div className="flex flex-col">
+      <button
+        onClick={handleBackToGenres}
+        className="bg-red-500 hover:bg-red-600 transition-colors duration-200 text-white font-bold py-2 px-4 rounded-md w-full mb-4"
+      >
+        Back
+      </button>
+      <h1 className="text-3xl font-bold text-red-500 mb-4 ">
+        {selectedGenre?.name}
+      </h1>
+      <p className="text-gray-500 mb-4">{selectedGenre?.description}</p>
+      <div className="container mx-auto p-4 grid gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
         {loading ? (
-          <p>Loading tracks...</p>
+          <p>Loading playlists...</p>
+        ) : !playlists.length ? (
+          <p>No playlists found</p>
         ) : (
-          tracks.map((track, index) => (
-            <div key={index} style={{ background: '#FFFFFF', borderRadius: '0.5rem', boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)', overflow: 'hidden' }}>
-              <img src={track.track.album.images[0]?.url} alt={track.track.name} style={{ width: '100%', objectFit: 'cover', height: '200px' }} />
-              <div style={{ padding: '1rem' }}>
-                <h2 style={{ fontSize: '1.5rem', fontWeight: 'bold' }}>{track.track.name}</h2>
-                <p style={{ fontSize: '0.875rem', color: '#666' }}>{track.track.artists[0].name}</p>
+          playlists.map((playlist, index) => (
+            <Link
+              to={`/playlist/${playlist.id}`}
+              key={index}
+              className="relative h-48 rounded-lg overflow-hidden group"
+            >
+              <img
+                src={playlist.images[0].url}
+                alt={playlist.name}
+                className="absolute inset-0 w-full h-full object-cover object-center"
+              />
+              <div className="absolute inset-0 bg-gray-900 bg-opacity-0 group-hover:bg-opacity-40 transition-colors duration-200 ease-in-out" />
+              <div className="absolute inset-0 flex flex-col justify-end p-4">
               </div>
-            </div>
+            </Link>
           ))
         )}
       </div>
@@ -99,9 +97,6 @@ const TracksList = ({ selectedGenre, setView, setSelectedGenre }) => {
 };
 
 export default TracksList;
-
-
-
 
 //Este codigo de abajo esta utilizando ApiAccessTokenProvider para obtener el token de acceso
 
