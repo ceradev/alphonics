@@ -45,7 +45,7 @@ app.use((req, res, next) => {
 
 // Verifica la existencia de la base de datos
 sequelize
-  .sync({ force: false })
+  .sync({ force: true })
   .then(() => {
     console.log("Base de datos sincronizada");
   })

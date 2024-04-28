@@ -5,6 +5,7 @@ const SignupForm = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
+  const [surname, setSurname] = useState("");
   const [email, setEmail] = useState("");
   const [error, setError] = useState(null);
   const CLIENT_ID = "e269b673d31546e6a6b44f63f4aeadc0";
@@ -19,7 +20,7 @@ const SignupForm = () => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ username, password, name, email }),
+        body: JSON.stringify({ username, password, name, surname, email, }),
       });
 
       const dataUser = await responseAPI.json();
@@ -94,8 +95,29 @@ const SignupForm = () => {
                         name="name"
                         value={name}
                         onChange={(e) => setName(e.target.value)}
-                        placeholder="Name and surname"
+                        placeholder="Name"
                         className="block w-full border-0 bg-transparent p-0 text-sm file:my-1 placeholder:text-muted-foreground/90 focus:outline-none focus:ring-0 focus:ring-red-500 sm:leading-7 text-foreground"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="mt-4">
+                <div>
+                  <div className="group relative rounded-lg border focus-within:border-red-400 px-3 pb-1.5 pt-2.5 duration-200 focus-within:ring focus-within:ring-red-400/30">
+                    <div className="flex justify-between">
+                      <label className="text-xs font-medium text-muted-foreground group-focus-within:text-red-500 text-black">
+                        Surname
+                      </label>
+                    </div>
+                    <div className="flex items-center">
+                      <input
+                        type="text"
+                        name="surname"
+                        value={surname}
+                        className="block w-full border-0 bg-transparent p-0 text-sm file:my-1 placeholder:text-muted-foreground/90 focus:outline-none focus:ring-0 focus:ring-red-500 sm:leading-7 text-foreground"
+                        onChange={(e) => setSurname(e.target.value)}
+                        placeholder="Surname"
                       />
                     </div>
                   </div>

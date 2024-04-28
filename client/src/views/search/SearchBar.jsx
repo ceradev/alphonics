@@ -100,7 +100,9 @@ const SearchBar = ({ onSearch, onGenresVisibilityChange }) => {
                           />
                           <div className="absolute inset-0 bg-black bg-opacity-40" />
                           <div className="absolute inset-0 flex flex-col justify-end p-4">
-                            <h3 className="text-sm font-semibold text-white">{artist.name}</h3>
+                            <h3 className="text-sm font-semibold text-white">
+                              {artist.name}
+                            </h3>
                           </div>
                         </div>
                       </Link>
@@ -108,73 +110,48 @@ const SearchBar = ({ onSearch, onGenresVisibilityChange }) => {
                   </div>
                 </div>
               )}
-            {searchResults.albums &&
-              searchResults.albums.items.length > 0 && (
-                <div>
-                  <h2 className="text-sm font-semibold text-gray-800 uppercase mb-4">
-                    Albums
-                  </h2>
-                  <div className="grid grid-cols-1 gap-4">
-                    {searchResults.albums.items.map((album, index) => (
-                      <Link
-                        to={{
-                          pathname: `/album/${album.id}`,
-                          state: { previousPath: location.pathname },
-                        }}
-                        key={index}
-                        className="group"
-                      >
-                        <div className="relative h-48">
-                          <img
-                            src={album.images[0]?.url}
-                            alt={album.name}
-                            className="absolute inset-0 w-full h-full object-cover object-center"
-                          />
-                          <div className="absolute inset-0 bg-gray-900 bg-opacity-0 group-hover:bg-opacity-40 transition-colors duration-200 ease-in-out" />
-                          <div className="absolute inset-0 flex flex-col justify-end p-4">
-                            <h3 className="text-sm font-semibold text-white">{album.name}</h3>
-                            <p className="text-xs text-gray-400">
-                              {album.artists[0].name}
-                            </p>
-                          </div>
-                        </div>
-                      </Link>
-                    ))}
-                  </div>
-                </div>
-              )}
-          </>
-        )}
-        {searchResults && (
-          searchResults.tracks &&
-            searchResults.tracks.items.length > 0 && (
+            {searchResults.albums && searchResults.albums.items.length > 0 && (
               <div>
                 <h2 className="text-sm font-semibold text-gray-800 uppercase mb-4">
-                  Tracks
+                  Albums
                 </h2>
                 <div className="grid grid-cols-1 gap-4">
-                  {searchResults.tracks.items.map((track, index) => (
+                  {searchResults.albums.items.map((album, index) => (
                     <Link
-                      to={`/track/${track.id}`}
+                      to={{
+                        pathname: `/album/${album.id}`,
+                        state: { previousPath: location.pathname },
+                      }}
                       key={index}
                       className="group"
                     >
                       <div className="relative h-48">
                         <img
-                          src={track.album.images[0]?.url}
-                          alt={track.album.name}
+                          src={album.images[0]?.url}
+                          alt={album.name}
                           className="absolute inset-0 w-full h-full object-cover object-center"
                         />
                         <div className="absolute inset-0 bg-gray-900 bg-opacity-0 group-hover:bg-opacity-40 transition-colors duration-200 ease-in-out" />
                         <div className="absolute inset-0 flex flex-col justify-end p-4">
-                          <h3 className="text-sm font-semibold text-white">{track.name}</h3>
+                          <h3 className="text-sm font-semibold text-white">
+                            {album.name}
+                          </h3>
                           <p className="text-xs text-gray-400">
-                            {track.artists
-                              .map((artist) => artist.name)
-                              .join(", ")}
-                          </p>
-                          <p className="text-xs text-gray-400">
-                            {msToMinutesAndSeconds(track.duration_ms)}
+                            {album.artists.map((artist, index) => (
+                              <>
+                                {index !== 0 ? ', ' : ''}
+                                <Link
+                                  className="hover:text-red-500 transition-colors duration-200 ease-in-out"
+                                  to={{
+                                    pathname: `/artist/${artist.id}`,
+                                    state: { previousPath: location.pathname },
+                                  }}
+                                  key={index}
+                                >
+                                  {artist.name}
+                                </Link>
+                              </>
+                            ))}
                           </p>
                         </div>
                       </div>
@@ -182,8 +159,52 @@ const SearchBar = ({ onSearch, onGenresVisibilityChange }) => {
                   ))}
                 </div>
               </div>
-            )
+            )}
+          </>
         )}
+        {searchResults &&
+          searchResults.tracks &&
+          searchResults.tracks.items.length > 0 && (
+            <div>
+              <h2 className="text-sm font-semibold text-gray-800 uppercase mb-4">
+                Tracks
+              </h2>
+              <div className="grid grid-cols-1 gap-4">
+                {searchResults.tracks.items.map((track, index) => (
+                  <Link to={`/track/${track.id}`} key={index} className="group">
+                    <div className="relative h-48">
+                      <img
+                        src={track.album.images[0]?.url}
+                        alt={track.album.name}
+                        className="absolute inset-0 w-full h-full object-cover object-center"
+                      />
+                      <div className="absolute inset-0 bg-gray-900 bg-opacity-0 group-hover:bg-opacity-40 transition-colors duration-200 ease-in-out" />
+                      <div className="absolute inset-0 flex flex-col justify-end p-4">
+                        <h3 className="text-sm font-semibold text-white">
+                          {track.name}
+                        </h3>
+                        <p className="text-xs text-gray-400">
+                          {track.artists.map((artist, index) => (
+                            <Link
+                              className="inline-block last:mr-0 text-gray-400 hover:text-red-500 transition-colors duration-300"
+                              to={`/artist/${artist.id}`}
+                              key={index}
+                            >
+                              {index > 0 ? ", " : ""}
+                              {artist.name}
+                            </Link>
+                          ))}
+                        </p>
+                        <p className="text-xs text-gray-400">
+                          {msToMinutesAndSeconds(track.duration_ms)}
+                        </p>
+                      </div>
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            </div>
+          )}
       </div>
     </div>
   );
