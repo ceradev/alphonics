@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import Layout from '../layouts/Layout';
+import Layout from '../../components/layouts/Layout';
 
 const Settings = () => {
     const [theme, setTheme] = useState('light');

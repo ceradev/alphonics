@@ -1,73 +1,65 @@
-import React from "react";
 import { FaFacebook } from "react-icons/fa";
 import { FaInstagram } from "react-icons/fa";
 import { BsTwitterX } from "react-icons/bs";
+import { Link } from "react-router-dom"; //Link from "react-router-dom";
 
 const DefaultFooter = () => {
   return (
     <div className="max-w-screen-xl px-4 py-12 mx-auto space-y-8 overflow-hidden sm:px-6 lg:px-8">
       <nav className="flex flex-wrap justify-center -mx-5 -my-2">
         <div className="px-5 py-2">
-          <a
-            href="#"
+          <Link
+            to="/about"
             className="text-base leading-6 text-white hover:text-gray-300 transition-colors duration-150 ease-in-out"
           >
             About
-          </a>
+          </Link>
         </div>
         <div className="px-5 py-2">
-          <a
-            href="#"
-            className="text-base leading-6 text-white hover:text-gray-300 transition-colors duration-150 ease-in-out"
-          >
-            Blog
-          </a>
-        </div>
-        <div className="px-5 py-2">
-          <a
-            href="#"
+          <Link
+            to="/team"
             className="text-base leading-6 text-white hover:text-gray-300 transition-colors duration-150 ease-in-out"
           >
             Team
-          </a>
+          </Link>
         </div>
         <div className="px-5 py-2">
-          <a
-            href="#"
+          <Link
+            to="/privacy"
             className="text-base leading-6 text-white hover:text-gray-300 transition-colors duration-150 ease-in-out"
           >
-            Pricing
-          </a>
+            Privacy
+          </Link>
         </div>
         <div className="px-5 py-2">
-          <a
-            href="#"
+          <Link
+            to="/contact"
             className="text-base leading-6 text-white hover:text-gray-300 transition-colors duration-150 ease-in-out"
           >
             Contact
-          </a>
+          </Link>
         </div>
         <div className="px-5 py-2">
-          <a
-            href="#"
+          <Link
+            to="/terms"
             className="text-base leading-6 text-white hover:text-gray-300 transition-colors duration-150 ease-in-out"
           >
             Terms
-          </a>
+          </Link>
         </div>
       </nav>
       <div className="flex justify-center mt-8 space-x-6">
-        <a href="#" className="text-white hover:text-gray-300 transition-colors-colors duration-150 ease-in-out">
+        <Link href="#" className="text-white hover:text-gray-300 transition-colors-colors duration-150 ease-in-out">
           <FaFacebook className="w-6 h-6" />
-        </a>
-        <a href="#" className="text-white hover:text-gray-300 transition-colors-colors duration-150 ease-in-out">
+        </Link>
+        <Link href="#" className="text-white hover:text-gray-300 transition-colors-colors duration-150 ease-in-out">
           <span className="sr-only">Instagram</span>
           <FaInstagram className="w-6 h-6" />
-        </a>
-        <a href="#" className="text-white hover:text-gray-300 transition-colors-colors duration-150 ease-in-out">
+        </Link>
+        <Link href="#" className="text-white hover:text-gray-300 transition-colors-colors duration-150 ease-in-out">
           <BsTwitterX className="w-6 h-6" />
-        </a>
-        <a href="#" className="text-white hover:text-gray-300 transition-colors-colors duration-150 ease-in-out">
+        </Link>
+        <Link href="#" className="text-white hover:text-gray-300 transition-colors-colors duration-150 ease-in-out">
           <span className="sr-only">GitHub</span>
           <svg
             className="w-6 h-6"
@@ -81,7 +73,7 @@ const DefaultFooter = () => {
               clipRule="evenodd"
             ></path>
           </svg>
-        </a>
+        </Link>
       </div>
       <p className="mt-8 text-base leading-6 text-center text-white">
         © 2024 Alphonics, Inc. All rights reserved.

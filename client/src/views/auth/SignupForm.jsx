@@ -1,4 +1,4 @@
-import DefaultLayout from "../layouts/DefaultLayout";
+import DefaultLayout from "../../components/layouts/DefaultLayout";
 import { useState } from "react";
 
 const SignupForm = () => {

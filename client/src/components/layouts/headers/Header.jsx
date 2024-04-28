@@ -1,10 +1,10 @@
 import { useState } from "react";
-import logo from "../../assets/images/logo.png";
-import logoname from "../../assets/images/logo-text.png";
+import logo from "../../../assets/images/logo.png";
+import logoname from "../../../assets/images/logo-text.png";
 import { LuLibrary } from "react-icons/lu";
 import { TbMusicSearch } from "react-icons/tb";
 import { FaHome, FaUser } from "react-icons/fa";
-import { RiLoginCircleFill } from "react-icons/ri";
+import { Link } from "react-router-dom";
 import { useEffect } from "react";
 
 const Header = () => {
@@ -83,21 +83,23 @@ const Header = () => {
             {/* Logo */}
             {isAuth ? (
               <div className="flex flex-shrink-0 items-center mr-4">
-                <img
-                  className="h-28 w-auto cursor-pointer hover:transition-transform duration-300 hover:transform hover:scale-105"
-                  src={logo}
-                  alt="Alphonics Logo"
-                  onClick={() => window.location.assign("/")}
-                />
+                <Link to={"/"}>
+                  <img
+                    className="h-28 w-auto cursor-pointer hover:transition-transform duration-300 hover:transform hover:scale-105"
+                    src={logo}
+                    alt="Alphonics Logo"
+                  />
+                </Link>
               </div>
             ) : (
               <div className="flex flex-shrink-0 items-center mr-4">
-                <img
-                  className="h-44 w-auto cursor-pointer hover:transition-transform duration-300 hover:transform hover:scale-105"
-                  src={logoname}
-                  alt="Alphonics Logo with name"
-                  onClick={() => window.location.assign("/")}
-                />
+                <Link to={"/"}>
+                  <img
+                    className="h-44 w-auto cursor-pointer hover:transition-transform duration-300 hover:transform hover:scale-105"
+                    src={logoname}
+                    alt="Alphonics Logo with name"
+                  />
+                </Link>
               </div>
             )}
             {/* Menu */}
@@ -161,24 +163,24 @@ const Header = () => {
                     aria-labelledby="user-menu-button"
                     tabIndex="-1"
                   >
-                    <a
-                      href="/profile"
+                    <Link
+                      to="/profile"
                       className="block px-4 py-2 text-sm text-gray-700 transition-colors duration-300 hover:bg-gray-20 hover:shadow-md"
                       role="menuitem"
                       tabIndex="-1"
                       id="user-menu-item-0"
                     >
                       Profile
-                    </a>
-                    <a
-                      href="/settings"
+                    </Link>
+                    <Link
+                      to="/settings"
                       className="block px-4 py-2 text-sm text-gray-700 transition-colors duration-300 hover:bg-gray-200 hover:shadow-md"
                       role="menuitem"
                       tabIndex="-1"
                       id="user-menu-item-1"
                     >
                       Settings
-                    </a>
+                    </Link>
                     <button
                       onClick={handleLogout}
                       className="block px-4 py-2 text-sm text-gray-700 transition-colors duration-300 hover:bg-gray-200 hover:shadow-md hover:text-red-500"
@@ -194,20 +196,18 @@ const Header = () => {
             </div>
           ) : (
             <div className="sm:flex hidden items-center gap-4">
-              <button
-                type="button"
+              <Link
+                to="/login"
                 className="bg-white text-red-500 font-medium px-4 py-2 hover:bg-gray-200 hover:text-red-600 hover:ring-red-600 rounded-md shadow-md transition-all duration-300 focus:outline-none"
-                onClick={() => window.location.assign("/login")}
               >
                 Log In
-              </button>
-              <button
-                type="button"
+              </Link>
+              <Link
+                to="/signup"
                 className="bg-red-500 text-white font-medium px-4 py-2 hover:bg-red-400 hover:text-white hover:ring-red-600 rounded-md shadow-md transition-all duration-300 focus:outline-none"
-                onClick={() => window.location.assign("/signup")}
               >
                 Sign Up
-              </button>
+              </Link>
             </div>
           )}
         </div>
@@ -218,43 +218,43 @@ const Header = () => {
       >
         {isAuth ? (
           <div className="space-y-1 px-2 pb-3 pt-2">
-            <a
-              href="/"
+            <Link
+              to="/"
               className="flex items-center text-gray-300 hover:transition-colors duration-300 hover:text-white rounded-md px-3 py-2 text-base font-medium"
               aria-current="page"
             >
               <FaHome className="h-4 w-4 mr-1" />
               Home
-            </a>
-            <a
-              href="/discover"
+            </Link>
+            <Link
+              to="/discover"
               className="flex items-center text-gray-300 hover:transition-colors duration-300 hover:text-white rounded-md px-3 py-2 text-base font-medium"
             >
               <TbMusicSearch className="h-4 w-4 mr-1" />
               Discover
-            </a>
-            <a
-              href="/library"
+            </Link>
+            <Link
+              to="/library"
               className="flex items-center text-gray-300 hover:transition-colors duration-300 hover:text-white rounded-md px-3 py-2 text-base font-medium"
             >
               <LuLibrary className="h-4 w-4 mr-1" />
               Library
-            </a>
+            </Link>
           </div>
         ) : (
           <div className="space-y-1 px-2 pb-3 pt-2">
-            <a
-              href="/login"
+            <Link
+              to="/login"
               className="flex items-center text-gray-300 hover:transition-colors duration-300 hover:text-white rounded-md px-3 py-2 text-base font-medium"
             >
               Log In
-            </a>
-            <a
-              href="/signup"
+            </Link>
+            <Link
+              to="/signup"
               className="flex items-center text-gray-300 hover:transition-colors duration-300 hover:text-white rounded-md px-3 py-2 text-base font-medium"
             >
               Sign Up
-            </a>
+            </Link>
           </div>
         )}
       </div>

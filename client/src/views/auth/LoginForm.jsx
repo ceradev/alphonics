@@ -1,6 +1,6 @@
 /* eslint-disable no-undef */
 import { useState } from "react";
-import DefaultLayout from "../layouts/DefaultLayout";
+import DefaultLayout from "../../components/layouts/DefaultLayout";
 
 const LoginForm = () => {
   const [username, setUsername] = useState("");
