@@ -68,9 +68,9 @@ const Library = () => {
               <FaUser className="text-white text-3xl" />
             </div>
             <div className="ml-4">
-              <h1 className="text-xl font-bold text-gray-900">Pepe the Frog</h1>
+              <h1 className="text-xl font-bold text-gray-900">{UserData?.username}</h1>
+              <p className="text-sm text-gray-600">Canciones escuchadas: 100</p>
               <p className="text-sm text-gray-600">Listas de reproducción: 5</p>
-              <p className="text-sm text-gray-600">Usuarios seguidos: 20</p>
             </div>
           </div>
           <div>
@@ -79,14 +79,17 @@ const Library = () => {
               type="text"
               placeholder="Buscar en la biblioteca"
               className="border-2 border-transparent rounded-md px-4 py-2 w-full focus:outline-none focus:border-red-500 transition-colors ease-in-out delay-100 duration-300 focus:shadow-sm shadow-md"
+              value={searchQuery}
+              onChange={handleSearch}
+              onSubmit={handleSearchSubmit}
             />
           </div>
         </div>
 
         {/* Sección de listas de reproducción */}
         <div className="mt-8 animate-fade-in-down">
-          <h2 className="text-2xl font-bold mb-4 text-gray-900">
-            Listas de reproducción
+          <h2 className="text-2xl font-bold mb-4 text-red-500">
+            Playlists
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
             {/* Lista de reproducción 1 */}
@@ -96,7 +99,7 @@ const Library = () => {
                 alt="Playlist"
                 className="h-40 object-cover"
               />
-              <div className="p-4">
+              <div className="p-4 animate-slide-up">
                 <h3 className="text-lg font-semibold text-gray-900">
                   Playlist 1
                 </h3>

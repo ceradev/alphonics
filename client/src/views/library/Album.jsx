@@ -81,9 +81,13 @@ const Album = () => {
                   <h3 className="text-sm font-semibold text-white">
                     {track.name}
                   </h3>
-                  <p className="text-xs text-gray-400">
-                    {track.artists.map((artist) => artist.name).join(", ")}
-                  </p>
+                  <ul className="text-xs text-gray-400 list-none">
+                    {track.artists.map((artist, index) => (
+                      <li key={index}>
+                        <Link className="hover:text-red-500 transition-colors duration-300 ease-in-out" to={`/artist/${artist.id}`}>{artist.name}</Link>
+                      </li>
+                    ))}
+                  </ul>
                   <p className="text-xs text-gray-400">
                     {msToMinutesAndSeconds(track.duration_ms)}
                   </p>

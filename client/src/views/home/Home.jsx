@@ -4,22 +4,54 @@ import { Link, useNavigate } from "react-router-dom";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import { jwtDecode } from "jwt-decode";
 
 const Home = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [featuredPlaylists, setFeaturedPlaylists] = useState([]);
   const [newReleases, setNewReleases] = useState([]);
   const [selectedPlaylist, setSelectedPlaylist] = useState(null);
+  const [userName, setUserName] = useState("");
   const navigate = useNavigate();
   const accessToken = sessionStorage.getItem("SPOTIFY_ACCESS_TOKEN");
 
   useEffect(() => {
     if (sessionStorage.getItem("USER_ACCESS_TOKEN") !== null) {
       setIsAuthenticated(true);
+
+      const decodedToken = jwtDecode(sessionStorage.getItem("USER_ACCESS_TOKEN"));
+      if (decodedToken.exp < Date.now() / 1000) {
+        sessionStorage.removeItem("USER_ACCESS_TOKEN");
+        setIsAuthenticated(false);
+      }
+
+      const userId = decodedToken.id;
+
+      const fetchUserName = async () => {
+        try {
+          const response = await fetch(`http://localhost:3000/api/v1/users/${userId}`, {
+            headers: {
+              Authorization: sessionStorage.getItem("USER_ACCESS_TOKEN"),
+            },
+          });
+          if (!response.ok) {
+            throw new Error("Failed to fetch user name");
+          }
+          const data = await response.json();
+
+          setUserName(data.user.username);
+
+        } catch (error) {
+          console.error("Error fetching user name:", error);
+        }
+      };
+      fetchUserName();
+
     } else {
       setIsAuthenticated(false);
+      navigate("/login");
     }
-  }, []);
+  }, [accessToken, navigate]);
 
   useEffect(() => {
     const fetchFeaturedPlaylists = async () => {
@@ -72,12 +104,14 @@ const Home = () => {
   // Saludo dependiendo de la hora del día
   const getGreeting = () => {
     const currentTime = new Date().getHours();
-    if (currentTime < 12) {
+    if (currentTime < 12 && currentTime >= 6) {
       return "morning";
-    } else if (currentTime < 18) {
+    } else if (currentTime < 18 && currentTime >= 12) {
       return "afternoon";
-    } else {
+    } else if (currentTime < 24 && currentTime >= 18) {
       return "evening";
+    } else {
+      return "night";
     }
   };
 
@@ -100,8 +134,8 @@ const Home = () => {
         {isAuthenticated ? (
           <div className="flex flex-wrap gap-4 p-4 md:p-8">
             <div className="w-full">
-              <h1 className="text-2xl font-bold mb-4 text-center text-red-500 capitalize tracking-tight animate-pulse">
-                Hello Anonymous, Good {getGreeting()}, what would you like to
+              <h1 className="text-2xl font-bold mb-4 text-center text-red-500 tracking-tight animate-pulse">
+                Hello {userName}, Good {getGreeting()}, What would you like to
                 listen to?
               </h1>
               <h2 className="text-xl font-bold mt-8 mb-4">

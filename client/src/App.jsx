@@ -5,7 +5,6 @@ import Library from "./views/library/Library";
 import LoginForm from "./views/auth/LoginForm";
 import SignupForm from "./views/auth/SignupForm";
 import Profile from "./views/user/Profile";
-import Settings from "./views/user/Settings";
 import Album from "./views/library/Album";
 import Playlist from "./views/library/Playlist";
 import Subscriptions from "./views/user/Subscriptions";
@@ -26,7 +25,6 @@ const App = () => {
         <Route path="/login" element={<LoginForm />} />
         <Route path="/signup" element={<SignupForm />} />
         <Route path="/profile" element={<Profile />} />
-        <Route path="/settings" element={<Settings />} />
         <Route path="/album/:id" element={<Album />} />
         <Route path="/playlist/:id" element={<Playlist />} />
         <Route path="/artist/:id" element={<Artist />} />
