@@ -25,14 +25,23 @@ const Profile = () => {
 
   const renderProfilePicture = () => {
     if (userData.profilePic) {
-      return <img src={userData.profilePic} alt="Profile" className="profile-pic" />;
+      return (
+        <img
+          src={userData.profilePic}
+          alt="Profile"
+          className="profile-pic w-32 h-32 bg-white rounded-full flex items-center justify-center m-auto"
+        />
+      );
     } else {
-      return <FaUser className="profile-icon" />;
+      return (
+        <div className="text-4xl text-black">
+          <FaUser className="profile-icon" />
+        </div>
+      );
     }
   };
 
   const renderFavoriteArtists = () => {
-    // Replace with actual data of most listened artists from API
     const favoriteArtists = [
       { id: 1, name: "Artist 1", image: "url_to_artist_1_image" },
       { id: 2, name: "Artist 2", image: "url_to_artist_2_image" },
@@ -40,24 +49,26 @@ const Profile = () => {
     ];
 
     return (
-      <div className="w-full flex flex-col items-center mt-8"> {/* Centrar todo */}
-        <h1 className="text-2xl font-bold mb-4">Artistas más escuchados</h1>
-        <div className="w-full max-w-screen-lg grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 ml-[300px]"> {/* Aplicar margen solo a los cards */}
+      <div className="w-full flex flex-col items-center mt-8">
+        <h1 className="text-2xl font-bold text-red-500 mb-4">Most listened artists</h1>
+        <div className="w-full max-w-screen-lg grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 ml-[300px]">
           {favoriteArtists.map((artist, index) => (
-            <div key={index} className="bg-white rounded-lg shadow-md overflow-hidden">
+            <div
+              key={index}
+              className="bg-white rounded-lg shadow-md overflow-hidden transition-all duration-300 ease-in-out hover:scale-105"
+            >
               <img src={artist.image} alt={artist.name} className="h-48 w-full object-cover" />
               <div className="p-4">
-                <h2 className="text-xl font-bold">{artist.name}</h2>
+                <h2 className="text-xl font-bold text-black">{artist.name}</h2>
               </div>
             </div>
           ))}
         </div>
       </div>
     );
-  };    
+  };
 
   const renderFavoriteSongs = () => {
-    // Replace with actual data of most listened songs from API
     const favoriteSongs = [
       { id: 1, name: "Song", artists: ["Artist"], duration: "3:42" },
       { id: 2, name: "Song", artists: ["Artist"], duration: "4:15" },
@@ -65,42 +76,46 @@ const Profile = () => {
     ];
 
     return (
-      <div className="w-full flex flex-col items-center mt-8">
-        <h2 className="text-2xl font-bold mb-4">Tus canciones más escuchadas de este mes</h2>
+      <div className="w-full flex flex-col items-center mt-8 mb-8">
+        <h2 className="text-2xl font-bold text-red-500 mb-4">Your most played songs this month</h2>
         <div className="w-full max-w-screen-lg">
-          <table className="favorite-songs-table w-full bg-white text-black border border-collapse border-black rounded-lg">
-            <thead>
-              <tr>
-              <th className="border border-black" colSpan="2">Canción</th>
-              </tr>
-            </thead>
-            <tbody>
-              {favoriteSongs.map((song, index) => (
-                <tr key={song.id} className="border border-black">
-                  <td className="border border-black text-center">{index + 1}</td>
-                  <td className="song-details border border-black p-2 text-center">
-                    {song.name} by {song.artists.join(", ")} - {song.duration}
-                  </td>
+          <div className="table-wrapper">
+            <table className="favorite-songs-table w-full bg-white border border-collapse border-gray-300 rounded-lg">
+              <thead>
+                <tr>
+                  <th className="px-4 py-2 border border-gray-300">Número</th>
+                  <th className="px-4 py-2 border border-gray-300">Canciones</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {favoriteSongs.map((song, index) => (
+                  <tr key={song.id} className="border border-gray-300">
+                    <td className="px-4 py-2 border border-gray-300">{index + 1}</td>
+                    <td className="song-details px-4 py-2 border border-gray-300">
+                      <div className="flex items-center">
+                        <div className="flex-grow truncate">{song.name} by {song.artists.join(", ")}</div>
+                        <div className="text-xs">{song.duration}</div>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
-    );     
-  };    
+    );
+  };
 
   return (
     <Layout>
-      <div className="profile-header flex items-center justify-center space-x-4"> {/* Añadir espacio entre elementos */}
+      <div className="profile-header flex items-center justify-center space-x-4 p-4">
         <div className="w-32 h-32 bg-white rounded-full flex items-center justify-center">
-          <div className="text-4xl">
-            {renderProfilePicture()}
-          </div>
+          {renderProfilePicture()}
         </div>
         <div>
-          <h1 className="text-2xl font-bold">{userData.name}</h1>
-          <p className="text-lg font-bold">{userData.followedArtists} Artistas seguidos {userData.followedUsers} Usuarios seguidos</p>
+          <h1 className="text-2xl font-bold text-red-500">{userData.name}</h1>
+          <p className="text-sm text-gray-600">{userData.followedArtists} followed Artists - {userData.followedUsers} followed Users </p>
         </div>
       </div>
 

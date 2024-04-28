@@ -3,7 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import SearchBar from '../search/SearchBar';
 import GenresList from './GenresList';
-import TracksList from '../library/TracksList';
+import TracksList from './TracksList';
 import Layout from '../../components/layouts/Layout';
 
 const Discover = () => {
