@@ -1,6 +1,6 @@
 # Alphonics
 
-Este es el repositorio de Alphonics, un proyecto que utiliza Astro junto con React en el lado del cliente, y Express y Node.js en el lado del servidor.
+Este es el repositorio de Alphonics, un proyecto que utiliza Vite junto con React en el lado del cliente, y Express y Node.js en el lado del servidor.
 
 ## Instalación
 
