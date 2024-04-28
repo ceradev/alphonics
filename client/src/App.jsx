@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Home from "./views/home/Home";
 import Discover from "./views/discover/Discover";
 import Library from "./views/library/Library";
@@ -17,8 +17,9 @@ import Team from "./views/pages/Team";
 
 const App = () => {
   return (
+    <Router>
       <Routes>
-        <Route path="/" exact element={<Home />} />
+        <Route path="/" element={<Home />} />
         <Route path="/discover" element={<Discover />} />
         <Route path="/library" element={<Library />} />
         <Route path="/login" element={<LoginForm />} />
@@ -27,14 +28,15 @@ const App = () => {
         <Route path="/settings" element={<Settings />} />
         <Route path="/album/:id" element={<Album />} />
         <Route path="/playlist/:id" element={<Playlist />} />
-        <Route path="*" element={<Home />} />
         <Route path="/subscriptions" element={<Subscriptions />} />
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/terms" element={<Terms />} />
         <Route path="/privacy" element={<Privacy />} />
         <Route path="/team" element={<Team />} />
+        <Route path="*" element={<Home />} />
       </Routes>
+    </Router>
   );
 };
 
