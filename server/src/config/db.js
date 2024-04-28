@@ -1,4 +1,6 @@
-import Sequelize from "sequelize";
+const Sequelize = require("sequelize");
+const dotenv = require("dotenv");
+dotenv.config();
 
 // Configuración de la base de datos
 const dbConfig = {

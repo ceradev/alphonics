@@ -1,7 +1,7 @@
 const User = require("../models/User");
 const Playlist = require("../models/Playlist");
 
-export default async function createTestUsers() {
+async function createTestUsers() {
   try {
     // Elimina todas las playlists existentes
     await Playlist.destroy({ where: {} });
