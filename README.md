@@ -16,12 +16,12 @@ Antes de ejecutar la aplicación, asegúrate de configurar las variables de ento
 
 ### Cliente
 
-- Ejecutar la aplicación parte del cliente: `dev:client`.
-- Construir la aplicación parte del cliente: `build:client`.
-- Visualizar la aplicación parte del cliente: `preview:client`.
+- Ejecutar la aplicación parte del cliente: `cd client && dev`.
+- Construir la aplicación parte del cliente: `cd client && build`.
+- Visualizar la aplicación parte del cliente: `cd client && preview`.
 
 ### Servidor
 
-- Ejecutar la aplicación parte del servidor: `dev:server`.
-- Construir la aplicación parte del servidor: `build:server`.
-- Visualizar la aplicación parte del servidor: `preview:server`.
+- Ejecutar la aplicación parte del servidor: `cd server && dev`.
+- Construir la aplicación parte del servidor: `cd server && build`.
+- Visualizar la aplicación parte del servidor: `cd server && preview`.
