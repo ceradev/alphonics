@@ -1,13 +1,3 @@
-<<<<<<< HEAD
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import Home from "./components/Home";
-import Discover from "./components/Discover";
-import Library from "./components/Library";
-import LoginForm from "./components/LoginForm";
-import SignupForm from "./components/SignupForm";
-import Profile from './components/Profile';
-import Settings from './components/Settings';
-=======
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Home from "./views/home/Home";
 import Discover from "./views/discover/Discover";
@@ -24,22 +14,10 @@ import Contact from "./views/pages/Contact";
 import Terms from "./views/pages/Terms";
 import Privacy from "./views/pages/Privacy";
 import Team from "./views/pages/Team";
->>>>>>> development
 
 const App = () => {
   return (
     <Router>
-<<<<<<< HEAD
-        <Routes>
-          <Route path="/" exact element={<Home />} />
-          <Route path="/discover" element={<Discover />} />
-          <Route path="/library" element={<Library />} />
-          <Route path="/login" element={<LoginForm />} />
-          <Route path="/signup" element={<SignupForm />} />
-          <Route path='/profile' element={<Profile />} />
-          <Route path="/settings" element={<Settings />} /> 
-        </Routes>
-=======
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/discover" element={<Discover />} />
@@ -58,7 +36,6 @@ const App = () => {
         <Route path="/team" element={<Team />} />
         <Route path="*" element={<Home />} />
       </Routes>
->>>>>>> development
     </Router>
   );
 };
