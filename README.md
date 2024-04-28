@@ -7,7 +7,7 @@ Este es el repositorio de Alphonics, un proyecto que utiliza Vite junto con Reac
 1. Clona este repositorio en tu máquina local.
 2. Navega hasta el directorio del proyecto: `cd alphonics`.
 3. Instala todas las dependencias del lado del cliente y del lado del servidor:
-4. `cd client && npm i` | `cd server && npm i`.
+`cd client && npm i` | `cd server && npm i`.
 
 ## Configuración
 
