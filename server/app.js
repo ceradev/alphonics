@@ -45,9 +45,10 @@ app.use((req, res, next) => {
 
 // Verifica la existencia de la base de datos
 sequelize
-  .sync({ force: false })
+  .sync({ force: true })
   .then(() => {
     console.log("Base de datos sincronizada");
+    createTestUsers();
   })
   .catch((error) => {
     console.error("Error al sincronizar la base de datos:", error);
@@ -72,5 +73,3 @@ app.use("/auth", require("./src/routes/auth.route.js"));
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);
 });
-
-createTestUsers();
