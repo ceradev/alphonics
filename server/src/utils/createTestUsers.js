@@ -16,7 +16,7 @@ async function createTestUsers() {
       username: "ceradev",
       profilePic: "https://example.com/image.jpg",
       email: "lI3pN@gmail.com",
-      password: "cesar123456",
+      password: "123456",
     });
 
     await User.create({
@@ -25,7 +25,7 @@ async function createTestUsers() {
       username: "chen3373",
       profilePic: "https://example.com/image.jpg",
       email: "hQqkSs@gmail.com",
-      password: "minghai123456",
+      password: "123456",
     });
 
     console.log("Usuarios de prueba creados exitosamente");
