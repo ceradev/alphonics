@@ -19,7 +19,9 @@ const Home = () => {
     if (sessionStorage.getItem("USER_ACCESS_TOKEN") !== null) {
       setIsAuthenticated(true);
 
-      const decodedToken = jwtDecode(sessionStorage.getItem("USER_ACCESS_TOKEN"));
+      const decodedToken = jwtDecode(
+        sessionStorage.getItem("USER_ACCESS_TOKEN")
+      );
       if (decodedToken.exp < Date.now() / 1000) {
         sessionStorage.removeItem("USER_ACCESS_TOKEN");
         setIsAuthenticated(false);
@@ -29,27 +31,27 @@ const Home = () => {
 
       const fetchUserName = async () => {
         try {
-          const response = await fetch(`http://localhost:3000/api/v1/users/${userId}`, {
-            headers: {
-              Authorization: sessionStorage.getItem("USER_ACCESS_TOKEN"),
-            },
-          });
+          const response = await fetch(
+            `http://localhost:3000/api/v1/users/${userId}`,
+            {
+              headers: {
+                Authorization: sessionStorage.getItem("USER_ACCESS_TOKEN"),
+              },
+            }
+          );
           if (!response.ok) {
             throw new Error("Failed to fetch user name");
           }
           const data = await response.json();
 
           setUserName(data.user.username);
-
         } catch (error) {
           console.error("Error fetching user name:", error);
         }
       };
       fetchUserName();
-
     } else {
       setIsAuthenticated(false);
-      navigate("/login");
     }
   }, [accessToken, navigate]);
 
@@ -159,7 +161,12 @@ const Home = () => {
                         className="p-4 cursor-pointer hover:text-red-500 transform transition-all duration-300 scale-100 hover:scale-105"
                         onClick={() => handlePlaylistSelect(playlist)}
                       >
-                        <Link to={`/playlist/${playlist.id}`} className="text-xl font-bold mb-2 cursor-pointer">{playlist.name}</Link>
+                        <Link
+                          to={`/playlist/${playlist.id}`}
+                          className="text-xl font-bold mb-2 cursor-pointer"
+                        >
+                          {playlist.name}
+                        </Link>
                         <p className="text-gray-600 text-sm">
                           Total tracks: {playlist.tracks.total}
                         </p>
@@ -173,7 +180,7 @@ const Home = () => {
               <h2 className="text-xl font-bold mt-8 mb-4">New Releases</h2>
               <Slider {...settings}>
                 {newReleases.map((album, index) => (
-                 <div key={index} className="w-full">
+                  <div key={index} className="w-full">
                     <div className="bg-gradient-to-br mr-2 ml-2 from-gray-100 to-gray-200 rounded-lg shadow-md overflow-hidden aspect-w-1 aspect-h-1 md:aspect-none transform transition-all duration-300 hover:shadow-xl hover:scale-105">
                       <img
                         src={album.images[0]?.url}
@@ -182,7 +189,12 @@ const Home = () => {
                         className="h-48 w-full object-cover cursor-pointer"
                       />
                       <div className="p-4">
-                        <Link to={`/album/${album.id}`} className="text-xl font-bold hover:text-red-500 cursor-pointer transition-colors duration-300">{album.name}</Link>
+                        <Link
+                          to={`/album/${album.id}`}
+                          className="text-xl font-bold hover:text-red-500 cursor-pointer transition-colors duration-300"
+                        >
+                          {album.name}
+                        </Link>
                         <ul className="mt-2">
                           {album.artists.map((artist, index) => (
                             <li key={index} className="inline-block mr-2 mb-2">
@@ -205,21 +217,21 @@ const Home = () => {
         ) : (
           <div className="flex flex-col items-center justify-center h-screen">
             <h1 className="text-5xl font-bold text-center tracking-tight animate-pulse animate-fade-in-down text-red-500">
-              ¡Bienvenido a Alphonics!
+              Welcome to Alphonics!
             </h1>
             <p className="mt-4 max-w-2xl text-xl animate-fade-in-up text-center">
-              Para poder disfrutar de escuchar, buscar o descubrir nueva música,
-              inicia sesión o registrate si eres un nuevo usuario.
+              To enjoy listening to, searching for or discovering new music, log
+              in or register if you are a new user.
             </p>
             <p className="mt-4 max-w-2xl text-xl animate-fade-in-up text-center">
-              ¡Te damos la bienvenida!
+              ¡We welcome you!
             </p>
             <div className="mt-8">
               <a
                 href="/subscriptions"
                 className="bg-gradient-to-r from-red-700 via-red-500 to-gray-300 text-white font-medium text-lg hover:bg-gradient-to-br focus:outline-none focus:ring-offset focus:ring-4 focus:ring-red-30 py-3 px-6 rounded-lg"
               >
-                Ver planes de suscripción
+                See subscriptions here
               </a>
             </div>
           </div>
