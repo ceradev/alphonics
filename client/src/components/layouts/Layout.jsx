@@ -2,7 +2,6 @@ import PropTypes from "prop-types";
 import Header from "./headers/Header";
 import { useState, useEffect } from "react";
 import DefaultFooter from "./footers/DefaultFooter";
-import Footer from "./footers/Footer";
 
 const Layout = ({ children }) => {
   const [isAuth, setIsAuth]  = useState(false);

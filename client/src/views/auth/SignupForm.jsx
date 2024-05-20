@@ -65,7 +65,7 @@ const SignupForm = () => {
   };
   return (
     <DefaultLayout>
-      <div className="text-foreground text-red-500 font-semibold text-2xl tracking-tighter mx-auto flex items-center gap-2">
+      <div className="text-foreground text-red-500 font-semibold text-2xl tracking-tighter flex items-center gap-2 mt-6 mx-6 ">
         Sign up to Alphonics to start listening to our music
       </div>
       <div className="relative mt-12 w-full max-w-lg sm:mt-10">
@@ -205,7 +205,10 @@ const SignupForm = () => {
                   </div>
                 </div>
               )}
-              <div className="mt-4 flex items-center justify-end gap-x-2">
+              <div className="mt-4 flex items-center justify-between gap-x-2">
+                <div className="text-sm font-medium text-muted-foreground/90">
+                  Already registered? <a href="/login" className="text-red-500 hover:underline hover:text-red-700 transition duration-300 ease-in-out ml-1">Log in</a>
+                </div>
                 <button
                   className="font-semibold hover:bg-red-600 hover:text-white hover:ring hover:ring-red-600 transition duration-300 inline-flex items-center justify-center rounded-md text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-white text-black h-10 px-4 py-2"
                   type="submit"

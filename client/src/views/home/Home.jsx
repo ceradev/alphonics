@@ -14,7 +14,6 @@ const Home = () => {
   const [userName, setUserName] = useState("");
   const navigate = useNavigate();
   const accessToken = sessionStorage.getItem("SPOTIFY_ACCESS_TOKEN");
-  const isMobile = window.innerWidth <= 768;
 
   useEffect(() => {
     if (sessionStorage.getItem("USER_ACCESS_TOKEN") !== null) {
@@ -57,6 +56,9 @@ const Home = () => {
   }, [accessToken, navigate]);
 
   useEffect(() => {
+    if (!accessToken) {
+      return;
+    }
     const fetchFeaturedPlaylists = async () => {
       try {
         const response = await fetch(
@@ -77,10 +79,15 @@ const Home = () => {
       }
     };
 
+    document.startViewTransition(() => {
     fetchFeaturedPlaylists();
+    });
   }, [accessToken, navigate]);
 
   useEffect(() => {
+    if (!accessToken) {
+      return;
+    }
     const fetchNewReleases = async () => {
       try {
         const response = await fetch(
@@ -101,7 +108,9 @@ const Home = () => {
       }
     };
 
+    document.startViewTransition(() => {
     fetchNewReleases();
+    });
   }, [accessToken]);
 
   // Saludo dependiendo de la hora del día
@@ -150,6 +159,7 @@ const Home = () => {
                   <Link
                     key={index}
                     onClick={() => handlePlaylistSelect(playlist)}
+                    style={{viewTransitionName: playlist.name}}
                   >
                     <div className="bg-gradient-to-br mr-2 ml-2 from-gray-100 to-gray-200 rounded-lg shadow-md overflow-hidden aspect-w-1 aspect-h-1 md:aspect-none transform transition-all duration-300 scale-100 hover:shadow-xl hover:scale-105 hover:text-red-500">
                       <img
@@ -182,7 +192,7 @@ const Home = () => {
               <h2 className="text-xl font-bold mt-8 mb-4">New Releases</h2>
               <Slider {...settings}>
                 {newReleases.map((album, index) => (
-                  <div key={index} className="w-full">
+                  <div key={index} className="w-full" style={{viewTransitionName: album.name}}>
                     <div className="bg-gradient-to-br mr-2 ml-2 from-gray-100 to-gray-200 rounded-lg shadow-md overflow-hidden aspect-w-1 aspect-h-1 md:aspect-none transform transition-all duration-300 hover:shadow-xl hover:scale-105">
                       <img
                         src={album.images[0]?.url}

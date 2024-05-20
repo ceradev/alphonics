@@ -66,7 +66,7 @@ const LoginForm = () => {
 
   return (
     <DefaultLayout>
-      <div className="text-foreground text-red-500 font-semibold text-2xl tracking-tighter mx-auto flex items-center gap-2">
+      <div className="text-foreground text-red-500 font-semibold text-2xl tracking-tighter mx-6 flex items-center gap-2">
         Log in to Alphonics to continue enjoying music
       </div>
       <div className="relative mt-12 w-full max-w-lg sm:mt-10">
@@ -141,15 +141,12 @@ const LoginForm = () => {
                   <div className="text-red-600 font-medium mr-6">{error}</div>
                 )}
               </div>
-              <div className="mt-4 flex items-center justify-end gap-x-2">
-                <a
-                  className="inline-flex items-center justify-center rounded-md text-sm font-medium transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 hover:bg-accent hover:ring hover:ring-red-600 h-10 px-4 py-2 duration-200"
-                  href="/signup"
-                >
-                  Register
-                </a>
+              <div className="mt-4 flex items-center justify-between gap-x-2">
+                <p className="text-xs font-medium text-muted-foreground">
+                  ¿You don&apos;t have an account? <a className="text-red-600 font-semibold cursor-pointer transition-all duration-300 ease-out hover:text-red-500 hover:scale-110 hover:underline" href="/signup">Sign up</a>
+                </p>
                 <button
-                  className="font-semibold hover:bg-red-600 hover:text-white hover:ring hover:ring-red-600 transition duration-300 inline-flex items-center justify-center rounded-md text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-white text-black h-10 px-4 py-2"
+                  className="font-semibold justify-end hover:bg-red-600 hover:text-white hover:ring hover:ring-red-600 transition duration-300 inline-flex items-end rounded-md text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-white text-black h-10 px-4 py-2"
                   type="submit"
                 >
                   Log in
