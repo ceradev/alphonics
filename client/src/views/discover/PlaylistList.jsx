@@ -16,6 +16,7 @@ const PlaylistList = ({ selectedGenre, setView, setSelectedGenre }) => {
 
   useEffect(() => {
     // Obtener el token de acceso de la sesión actual
+    window.scrollTo(0, 0);
     if (sessionStorage.getItem("USER_ACCESS_TOKEN") === null) {
       navigate("/login");
     }

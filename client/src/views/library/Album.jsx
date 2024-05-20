@@ -10,6 +10,7 @@ const Album = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
+    window.scrollTo(0, 0);
     if (sessionStorage.getItem("USER_ACCESS_TOKEN") === null) {
       navigate("/login");
     }

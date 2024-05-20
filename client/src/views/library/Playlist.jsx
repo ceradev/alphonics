@@ -11,6 +11,8 @@ const Playlist = () => {
   const accessToken = sessionStorage.getItem("SPOTIFY_ACCESS_TOKEN");
 
   useEffect(() => {
+    window.scrollTo(0, 0);
+
     const fetchPlaylistInfo = async (playlistId) => {
       try {
         const playlistResponse = await fetch(
@@ -33,7 +35,6 @@ const Playlist = () => {
         setIsLoading(false);
       }
     };
-
     if (sessionStorage.getItem("USER_ACCESS_TOKEN") === null) {
       navigate("/login");
     } else {
@@ -71,9 +72,7 @@ const Playlist = () => {
                 {playlist.name}
               </h1>
               <p className="text-gray-600">{playlist.description}</p>
-              <p className="text-gray-600">
-                Tracks: {playlist.tracks.total}
-              </p>
+              <p className="text-gray-600">Tracks: {playlist.tracks.total}</p>
               <button
                 className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded "
                 onClick={handleGoBack}
@@ -83,7 +82,10 @@ const Playlist = () => {
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-4">
               {playlist.tracks?.items?.map((track, index) => (
-                <div key={index} className="relative h-48 rounded-lg overflow-hidden group">
+                <div
+                  key={index}
+                  className="relative h-48 rounded-lg overflow-hidden group"
+                >
                   <img
                     src={track.track.album.images[0]?.url}
                     alt={track.track.name}
@@ -91,16 +93,24 @@ const Playlist = () => {
                   />
                   <div className="absolute inset-0 bg-gray-900 bg-opacity-0 group-hover:bg-opacity-40 transition-colors duration-200 ease-in-out" />
                   <div className="absolute inset-0 flex flex-col justify-end p-4">
-                    <h3 className="text-sm font-semibold text-white">{track.track.name}</h3>
+                    <h3 className="text-sm font-semibold text-white">
+                      {track.track.name}
+                    </h3>
                     <div className="text-xs mt-2">
                       {track.track.artists.map((artist, index) => (
-                        <Link to={`/artist/${artist.id}`} key={index} className="text-xs text-gray-400 hover:text-red-500 transition-colors duration-300">
+                        <Link
+                          to={`/artist/${artist.id}`}
+                          key={index}
+                          className="text-xs text-gray-400 hover:text-red-500 transition-colors duration-300"
+                        >
                           {index !== 0 ? ", " : ""}
                           {artist.name}
                         </Link>
                       ))}
                     </div>
-                    <p className="text-xs text-gray-400">{msToMinutesAndSeconds(track.track.duration_ms)}</p>
+                    <p className="text-xs text-gray-400">
+                      {msToMinutesAndSeconds(track.track.duration_ms)}
+                    </p>
                   </div>
                 </div>
               ))}

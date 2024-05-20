@@ -15,12 +15,14 @@ const GenresList = ({ setView, setSelectedGenre }) => {
   const accessToken = sessionStorage.getItem("SPOTIFY_ACCESS_TOKEN");
 
   useEffect(() => {
+    window.scrollTo(0, 0);
     if (sessionStorage.getItem("USER_ACCESS_TOKEN") === null) {
       navigate("/login");
     }
   }, [navigate]);
 
   useEffect(() => {
+    
     // Fetch genres
     const fetchGenres = async () => {
       if (!accessToken) return;

@@ -11,7 +11,7 @@ const Subscriptions = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 animate-fade-in">
           {/* Premium Plans */}
-          <div className="border-2 border-transparent border-shadow-2xl p-6 rounded-lg shadow-lg bg-white hover:scale-105 transition-transform duration-300 ease-in-out">
+          <div className="border-2 border-transparent border-shadow-2xl p-6 rounded-lg shadow-lg bg-transparent hover:scale-105 transition-transform duration-300 ease-in-out">
             <h2 className="text-2xl font-bold mb-4">Individual Premium</h2>
             <ul className="space-y-2 text-gray-700">
               <li className="flex items-center">
@@ -35,7 +35,7 @@ const Subscriptions = () => {
             </button>
           </div>
 
-          <div className="border-2 border-transparent border-shadow-2xl p-6 rounded-lg shadow-lg bg-white hover:scale-105 transition-transform duration-300 ease-in-out">
+          <div className="border-2 border-transparent border-shadow-2xl p-6 rounded-lg shadow-lg bg-transparent hover:scale-105 transition-transform duration-300 ease-in-out">
             <h2 className="text-2xl font-bold mb-4">Student Premium</h2>
             <ul className="space-y-2 text-gray-700">
               <li className="flex items-center">
@@ -53,7 +53,7 @@ const Subscriptions = () => {
             </button>
           </div>
 
-          <div className="border-transparent border-shadow-2xl p-6 rounded-lg shadow-lg bg-white hover:scale-105 transition-transform duration-300 ease-in-out">
+          <div className="border-transparent border-shadow-2xl p-6 rounded-lg shadow-lg bg-transparent hover:scale-105 transition-transform duration-300 ease-in-out">
             <h2 className="text-2xl font-bold mb-4">Family Premium</h2>
             <p className="text-2xl font-bold mb-4">69,99 €/month</p>
             <ul className="space-y-2 text-gray-700">
@@ -72,7 +72,7 @@ const Subscriptions = () => {
             </button>
           </div>
 
-          <div className="border-2 border-transparent border-shadow-2xl p-6 rounded-lg shadow-lg bg-white hover:scale-105 transition-transform duration-300 ease-in-out">
+          <div className="border-2 border-transparent border-shadow-2xl p-6 rounded-lg shadow-lg bg-transparent hover:scale-105 transition-transform duration-300 ease-in-out">
             <h2 className="text-2xl font-bold mb-4">Duo Premium</h2>
             <p className="text-2xl font-bold mb-4">49,99 €/month</p>
             <ul className="space-y-2 text-gray-700">

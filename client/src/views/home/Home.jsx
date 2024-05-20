@@ -16,12 +16,15 @@ const Home = () => {
   const accessToken = sessionStorage.getItem("SPOTIFY_ACCESS_TOKEN");
 
   useEffect(() => {
+    window.scrollTo(0, 0);
     if (sessionStorage.getItem("USER_ACCESS_TOKEN") !== null) {
       setIsAuthenticated(true);
 
+      // Check if token is expired
       const decodedToken = jwtDecode(
         sessionStorage.getItem("USER_ACCESS_TOKEN")
       );
+
       if (decodedToken.exp < Date.now() / 1000) {
         sessionStorage.removeItem("USER_ACCESS_TOKEN");
         setIsAuthenticated(false);
