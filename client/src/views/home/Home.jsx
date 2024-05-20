@@ -14,6 +14,7 @@ const Home = () => {
   const [userName, setUserName] = useState("");
   const navigate = useNavigate();
   const accessToken = sessionStorage.getItem("SPOTIFY_ACCESS_TOKEN");
+  const isMobile = window.innerWidth <= 768;
 
   useEffect(() => {
     if (sessionStorage.getItem("USER_ACCESS_TOKEN") !== null) {
@@ -143,6 +144,7 @@ const Home = () => {
               <h2 className="text-xl font-bold mt-8 mb-4">
                 Featured Playlists
               </h2>
+              {/* Slider de playlists destacadas */}
               <Slider {...settings}>
                 {featuredPlaylists.map((playlist, index) => (
                   <Link

@@ -86,7 +86,7 @@ const SignupForm = () => {
                   <div className="group relative rounded-lg border focus-within:border-red-400 px-3 pb-1.5 pt-2.5 duration-200 focus-within:ring focus-within:ring-red-400/30">
                     <div className="flex justify-between">
                       <label className="text-xs font-medium text-muted-foreground group-focus-within:text-red-500 text-black">
-                        Your name
+                        Name
                       </label>
                     </div>
                     <div className="flex items-center">

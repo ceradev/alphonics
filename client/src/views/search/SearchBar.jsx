@@ -92,7 +92,7 @@ const SearchBar = ({ onSearch, onGenresVisibilityChange }) => {
                         key={index}
                         className="group"
                       >
-                        <div className="w-full h-48 bg-gray-200 rounded-lg relative overflow-hidden">
+                        <div className="w-full h-48 bg-gray-200 rounded-lg relative overflow-hidden group hover:opacity-75 transition duration-300 ease-in-out">
                           <img
                             src={artist.images[1]?.url}
                             alt={artist.name}
@@ -171,7 +171,7 @@ const SearchBar = ({ onSearch, onGenresVisibilityChange }) => {
               </h2>
               <div className="grid grid-cols-1 gap-4">
                 {searchResults.tracks.items.map((track, index) => (
-                  <Link to={`/track/${track.id}`} key={index} className="group">
+                  <div key={index} className="group">
                     <div className="relative h-48">
                       <img
                         src={track.album.images[0]?.url}
@@ -200,7 +200,7 @@ const SearchBar = ({ onSearch, onGenresVisibilityChange }) => {
                         </p>
                       </div>
                     </div>
-                  </Link>
+                  </div>
                 ))}
               </div>
             </div>

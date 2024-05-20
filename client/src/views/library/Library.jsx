@@ -8,6 +8,13 @@ const Library = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [UserPlaylists, setUserPlaylists] = useState([]);
   const [UserData, setUserData] = useState(null);
+  const navigate = useNavigate();
+  
+  useEffect(() => {
+    if (sessionStorage.getItem("USER_ACCESS_TOKEN") === null) {
+      navigate("/login");
+    }
+  }, [navigate]);
 
   useEffect(() => {
     const fetchUserData = async () => {
